@@ -49,10 +49,13 @@ add_executable(${PROJECT_NAME}
     src/graphics/shape.h
 
     util/tiny_obj_loader.h
+    util/nanoflann.hpp
     util/unsupportedeigenthing/OpenGLSupport
     src/settings.cpp
     src/settings.h
     src/utils.cpp
+    src/stipple.cpp
+    src/voronoi.cpp
 )
 
 # GLEW: this creates its library and allows you to `#include "GL/glew.h"`

@@ -45,11 +45,22 @@ int main(int argc, char *argv[])
     QSettings input( args[0], QSettings::IniFormat);
     // IO
     settings.image_path = input.value("IO/image_path").toString().toStdString();
+    settings.output_path = input.value("IO/output_path").toString().toStdString();
+    // stipple init
+    settings.init_stipple_num = input.value("INIT/init_stipple_num").toInt();
+    settings.init_stipple_size = input.value("INIT/init_stipple_size").toFloat();
+    settings.supersampling_factor = input.value("INIT/supersampling_factor").toInt();
+    // wlbg para
+    settings.max_iteration = input.value("WLBG/max_iteration").toInt();
+    settings.hysteresis = input.value("WLBG/hysteresis").toFloat();
+    settings.hysteresis_delta = input.value("WLBG/hysteresis_delta").toFloat();
+    settings.adaptive_stipple_size = input.value("WLBG/adaptive_stipple_size").toBool();
 
     // stippling
     WLBG m_wlbg = WLBG();
-    m_wlbg.stipple();
+    std::vector<Stipple> stipples = m_wlbg.stippling();
     std::cout << "finish" << std::endl;
+    m_wlbg.paint(stipples);
 
     // Create a GUI window
     MainWindow w;
