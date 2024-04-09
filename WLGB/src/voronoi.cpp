@@ -9,15 +9,6 @@
 
 using namespace Eigen;
 
-struct Moments {
-    float moment00;
-    float moment10;
-    float moment01;
-    float moment11;
-    float moment20;
-    float moment02;
-};
-
 std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points)
 {
     std::cout << "Build Voronoi Cells" << std::endl;

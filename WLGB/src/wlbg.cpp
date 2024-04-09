@@ -22,10 +22,10 @@ std::vector<Stipple> WLBG::stippling()
     // init
     std::vector<Stipple> stipples = init_stipples();
 
+    // stippling iteration
     int num_split = 0;
     int num_merge = 0;
 
-    // stippling iteration
     for (int i = 0; i < settings.max_iteration; i++)
     {
         std::cout << "Iteration: " << i << std::endl;

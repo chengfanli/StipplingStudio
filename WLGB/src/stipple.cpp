@@ -33,4 +33,6 @@ float WLBG::current_stipple_size(Cell cell)
     }
     else
         return settings.init_stipple_size;
+
+    return settings.init_stipple_size;
 }
