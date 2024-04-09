@@ -15,6 +15,7 @@ struct Settings {
     int supersampling_factor; // factor of supersampling the original image
 
     // wlbg para
+    bool use_gpu; // use gpu to compute voronoi or not
     int max_iteration; // max iteration num
     float hysteresis; // hysteresis for split and merge
     float hysteresis_delta; // delta of hysteresis

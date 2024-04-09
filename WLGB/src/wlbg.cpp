@@ -21,6 +21,7 @@ std::vector<Stipple> WLBG::stippling()
 {
     // init
     std::vector<Stipple> stipples = init_stipples();
+    if (settings.use_gpu) init_voronoi_context();
 
     // stippling iteration
     int num_split = 0;
@@ -31,7 +32,7 @@ std::vector<Stipple> WLBG::stippling()
         std::cout << "Iteration: " << i << std::endl;
 
         // cells
-        std::vector<Cell> voronoi_cells = generate_voronoi_cells(stipples);
+        std::vector<Cell> voronoi_cells = settings.use_gpu ? generate_voronoi_cells_gpu(stipples) : generate_voronoi_cells(stipples);
         std::cout << "Current number of points: " << stipples.size() << std::endl;
 
         // current hysteresis

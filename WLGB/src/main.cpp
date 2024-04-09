@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
     settings.init_stipple_size = input.value("INIT/init_stipple_size").toFloat();
     settings.supersampling_factor = input.value("INIT/supersampling_factor").toInt();
     // wlbg para
+    settings.use_gpu = input.value("WLBG/use_gpu").toBool();
     settings.max_iteration = input.value("WLBG/max_iteration").toInt();
     settings.hysteresis = input.value("WLBG/hysteresis").toFloat();
     settings.hysteresis_delta = input.value("WLBG/hysteresis_delta").toFloat();
