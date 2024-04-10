@@ -5,7 +5,8 @@
 #include <set>
 #include <vector>
 #include <random>
-#include <omp.h>
+//#include <omp.h>
+#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 
 using namespace Eigen;
 

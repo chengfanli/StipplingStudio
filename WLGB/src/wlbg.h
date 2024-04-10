@@ -6,7 +6,8 @@
 #include "Eigen/Sparse"
 
 #include <set>
-#include <omp.h>
+//#include <omp.h>
+#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 #include <QImage>
 #include <QVector>
 

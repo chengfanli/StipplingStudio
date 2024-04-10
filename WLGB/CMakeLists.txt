@@ -13,6 +13,29 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
+if(APPLE)
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    set(OpenMP_C "${CMAKE_C_COMPILER}" CACHE STRING "" FORCE)
+    set(OpenMP_C_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument" CACHE STRING "" FORCE)
+    set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5" CACHE STRING "" FORCE)
+    set(OpenMP_libomp_LIBRARY ${OpenMP_C_LIB_NAMES} CACHE STRING "" FORCE)
+    set(OpenMP_libgomp_LIBRARY ${OpenMP_C_LIB_NAMES} CACHE STRING "" FORCE)
+    set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES} CACHE STRING "" FORCE)
+endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(OpenMP_CXX "${CMAKE_CXX_COMPILER}" CACHE STRING "" FORCE)
+  set(OpenMP_CXX_FLAGS "-fopenmp=libomp -Wno-unused-command-line-argument" CACHE STRING "" FORCE)
+  set(OpenMP_CXX_LIB_NAMES "libomp" "libgomp" "libiomp5" CACHE STRING "" FORCE)
+  set(OpenMP_libomp_LIBRARY ${OpenMP_CXX_LIB_NAMES} CACHE STRING "" FORCE)
+  set(OpenMP_libgomp_LIBRARY ${OpenMP_CXX_LIB_NAMES} CACHE STRING "" FORCE)
+  set(OpenMP_libiomp5_LIBRARY ${OpenMP_CXX_LIB_NAMES} CACHE STRING "" FORCE)
+endif()
+endif()
+
+
+
+
 # Specifies required Qt components
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Concurrent)
@@ -21,7 +44,12 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS OpenGL)
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
-find_package(OpenMP)
+#find_package(OpenMP REQUIRED COMPONENTS OpenMP_CXX)
+
+#TJR find_package(OpenMP)
+set(OPENMP_FOUND TRUE)
+set(OpenMP_CXX_FLAGS “-fopenmp”)
+#TJR end edits
 
 # Allows you to include files from within those directories, without prefixing their filepaths
 include_directories(src)
@@ -72,7 +100,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Widgets
     Qt::Xml
     StaticGLEW
-    OpenMP::OpenMP_CXX
+#    OpenMP::OpenMP_CXX
 )
 
 # This allows you to `#include "Eigen/..."`
@@ -110,3 +138,5 @@ endif()
 if (APPLE)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated-volatile")
 endif()
+
+
