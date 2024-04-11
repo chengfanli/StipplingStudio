@@ -23,12 +23,12 @@ QVector<QVector2D> sites(const std::vector<Stipple> &stipples)
     return sites;
 }
 
-std::vector<Cell> WLBG::generate_voronoi_cells_gpu(std::vector<Stipple> points)
-{
-    auto indexMap = calculate(sites(points));
-    std::cout << "finish calculate" << std::endl;
-    return accumulateCells(indexMap);
-}
+// std::vector<Cell> WLBG::generate_voronoi_cells_gpu(std::vector<Stipple> points)
+// {
+//     auto indexMap = calculate(sites(points));
+//     std::cout << "finish calculate" << std::endl;
+//     return accumulateCells(indexMap);
+// }
 
 namespace CellEncoder {
 QVector3D encode(const uint32_t index) {

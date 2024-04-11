@@ -64,15 +64,22 @@ int main(int argc, char *argv[])
     m_wlbg.paint(stipples);
 
     // Create a GUI window
+    std::cout << "Start Window" << std::endl;
     MainWindow w;
+    std::cout << "1" << std::endl;
     w.resize(600, 500);
+    std::cout << "2" << std::endl;
     int desktopArea = QGuiApplication::primaryScreen()->size().width() *
                       QGuiApplication::primaryScreen()->size().height();
+    std::cout << "3" << std::endl;
     int widgetArea = w.width() * w.height();
+    std::cout << "4" << std::endl;
     if (((float)widgetArea / (float)desktopArea) < 0.75f)
         w.show();
     else
         w.showMaximized();
+
+    std::cout << "5" << std::endl;
 
     return a.exec();
 }

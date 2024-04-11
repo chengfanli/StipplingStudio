@@ -57,6 +57,9 @@ add_executable(${PROJECT_NAME}
     src/stipple.cpp
     src/voronoi.cpp
     src/voronoi_gpu.cpp
+    src/voronoi_new.cpp
+
+    src/jc_voronoi.h
 )
 
 # GLEW: this creates its library and allows you to `#include "GL/glew.h"`

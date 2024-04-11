@@ -21,7 +21,7 @@ std::vector<Stipple> WLBG::stippling()
 {
     // init
     std::vector<Stipple> stipples = init_stipples();
-    if (settings.use_gpu) init_voronoi_context();
+    // if (settings.use_gpu) init_voronoi_context();
 
     // stippling iteration
     int num_split = 0;
@@ -29,7 +29,7 @@ std::vector<Stipple> WLBG::stippling()
 
     for (int i = 0; i < settings.max_iteration; i++)
     {
-        std::cout << "Iteration: " << i << std::endl;
+        std::cout << "Iteration: " << i + 1 << std::endl;
 
         // cells
         std::vector<Cell> voronoi_cells = settings.use_gpu ? generate_voronoi_cells_gpu(stipples) : generate_voronoi_cells(stipples);
@@ -65,6 +65,8 @@ std::vector<Stipple> WLBG::stippling()
 
 void WLBG::paint(std::vector<Stipple> points)
 {
+    std::cout << "Start Painting" << std::endl;
+
     QSize imageSize(1200, 1000); // Set your desired image size
     QString filePath = QString::fromStdString(settings.output_path); // Set your desired file path
 
@@ -90,5 +92,7 @@ void WLBG::paint(std::vector<Stipple> points)
 
     // Save the image
     image.save(filePath);
+
+    std::cout << "Finish Painting" << std::endl;
 }
 
