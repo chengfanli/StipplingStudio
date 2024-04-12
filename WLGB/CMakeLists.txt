@@ -60,21 +60,21 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/mainwindow.cpp
     src/wlbg.cpp
-    src/glwidget.cpp
-    src/graphics/camera.cpp
-    src/graphics/graphicsdebug.cpp
-    src/graphics/meshloader.cpp
-    src/graphics/shader.cpp
-    src/graphics/shape.cpp
+#    src/glwidget.cpp
+#    src/graphics/camera.cpp
+#    src/graphics/graphicsdebug.cpp
+#    src/graphics/meshloader.cpp
+#    src/graphics/shader.cpp
+#    src/graphics/shape.cpp
 
     src/mainwindow.h
     src/wlbg.h
-    src/glwidget.h
-    src/graphics/camera.h
-    src/graphics/graphicsdebug.h
-    src/graphics/meshloader.h
-    src/graphics/shader.h
-    src/graphics/shape.h
+#    src/glwidget.h
+#    src/graphics/camera.h
+#    src/graphics/graphicsdebug.h
+#    src/graphics/meshloader.h
+#    src/graphics/shader.h
+#    src/graphics/shape.h
 
     util/tiny_obj_loader.h
     util/nanoflann.hpp
@@ -84,10 +84,14 @@ add_executable(${PROJECT_NAME}
     src/utils.cpp
     src/stipple.cpp
     src/voronoi.cpp
+    src/canvas.cpp
+    src/canvas.h
+    src/rgba.h
 )
 
 # GLEW: this creates its library and allows you to `#include "GL/glew.h"`
-add_library(StaticGLEW STATIC glew/src/glew.c)
+add_library(StaticGLEW STATIC glew/src/glew.c
+)
 include_directories(${PROJECT_NAME} PRIVATE glew/include)
 
 # Specifies libraries to be linked (Qt components, glew, etc)

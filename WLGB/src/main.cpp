@@ -24,10 +24,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
     // Set OpenGL version to 4.1 and context to Core
-    QSurfaceFormat fmt;
-    fmt.setVersion(4, 1);
-    fmt.setProfile(QSurfaceFormat::CoreProfile);
-    QSurfaceFormat::setDefaultFormat(fmt);
+//    QSurfaceFormat fmt;
+//    fmt.setVersion(4, 1);
+//    fmt.setProfile(QSurfaceFormat::CoreProfile);
+//    QSurfaceFormat::setDefaultFormat(fmt);
 
     // Parse input
     QCommandLineParser parser;
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     // settings
     QSettings input( args[0], QSettings::IniFormat);
     // IO
-    settings.image_path = input.value("IO/image_path").toString().toStdString();
-    settings.output_path = input.value("IO/output_path").toString().toStdString();
+    settings.image_path = QString::fromStdString(input.value("IO/image_path").toString().toStdString());
+    settings.output_path = QString::fromStdString(input.value("IO/output_path").toString().toStdString());
     // stipple init
     settings.init_stipple_num = input.value("INIT/init_stipple_num").toInt();
     settings.init_stipple_size = input.value("INIT/init_stipple_size").toFloat();
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     std::cout << "finish" << std::endl;
     m_wlbg.paint(w, stipples, 5);
 
-//    w.show();
+    w.show();
 
     return a.exec();
 }

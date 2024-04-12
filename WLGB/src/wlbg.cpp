@@ -12,7 +12,7 @@ using namespace Eigen;
 
 WLBG::WLBG()
 {
-    m_image = QImage(QString::fromStdString(settings.image_path));
+    m_image = QImage(settings.image_path);
     m_density = m_image.scaledToWidth(
             settings.supersampling_factor * m_image.width(),
             Qt::SmoothTransformation
@@ -69,7 +69,7 @@ std::vector<Stipple> WLBG::stippling(MainWindow &w, WLBG *m_wlbg)
 void WLBG::paint(MainWindow &w, std::vector<Stipple> points, int iteration)
 {
     QSize imageSize(1200, 1000); // Set your desired image size
-    QString filePath = QString::fromStdString(settings.output_path); // Set your desired file path
+    QString filePath = settings.output_path; // Set your desired file path
 
     QImage image(imageSize, QImage::Format_ARGB32);
     image.fill(Qt::white); // Fill the background with white
@@ -95,50 +95,36 @@ void WLBG::paint(MainWindow &w, std::vector<Stipple> points, int iteration)
     image.save(filePath);
 
     w.resize(1200, 1200);
-    // int desktopArea = QGuiApplication::primaryScreen()->size().width() *
-    //                   QGuiApplication::primaryScreen()->size().height();
-    // int widgetArea = w.width() * w.height();
-    // if (((float)widgetArea / (float)desktopArea) < 0.75f)
-    //     w.show();
-    // else
-    //     w.showMaximized();
 
-    QPixmap pixmap = QPixmap::fromImage(image);
 
-    // Create a label and set its text
-//    QLabel *label = new QLabel(&w);
+//    QPixmap pixmap = QPixmap::fromImage(image);
+
+//    // Create a label for the image
+//    QLabel *imageLabel = new QLabel(&w);
+//    imageLabel->setPixmap(pixmap);
+//    imageLabel->setAlignment(Qt::AlignCenter);
+
+//    // Create a label for the text
+//    QLabel *textLabel = new QLabel(&w);
 //    QString labelText = QString("Iteration %1").arg(iteration);
-////    label->setText(labelText);
-//    label->setPixmap(pixmap);
-//    label->setAlignment(Qt::AlignCenter); // Center the text within the label
-//    label->show(); // Show the label
+//    textLabel->setText(labelText);
+//    textLabel->setAlignment(Qt::AlignCenter);
 
-    // Create a label for the image
-    QLabel *imageLabel = new QLabel(&w);
-    imageLabel->setPixmap(pixmap);
-    imageLabel->setAlignment(Qt::AlignCenter);
-
-    // Create a label for the text
-    QLabel *textLabel = new QLabel(&w);
-    QString labelText = QString("Iteration %1").arg(iteration);
-    textLabel->setText(labelText);
-    textLabel->setAlignment(Qt::AlignCenter);
-
-    // Create a layout and add the labels
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(textLabel);
-    layout->addWidget(imageLabel);
+//    // Create a layout and add the labels
+//    QVBoxLayout *layout = new QVBoxLayout();
+//    layout->addWidget(textLabel);
+//    layout->addWidget(imageLabel);
 
     // Check if the MainWindow already has a layout
     // If it does, remove it before setting a new one
-    if (w.layout()) {
-        delete w.layout(); // This will delete the old layout and its widgets
-    }
+//    if (w.layout()) {
+//        delete w.layout(); // This will delete the old layout and its widgets
+//    }
 
 
     // Set the container as the central widget of the window
-    w.setLayout(layout);
+//    w.setLayout(layout);
 
-    w.show();
+//    w.show();
 }
 

@@ -1,7 +1,16 @@
 #pragma once
 
 #include <QMainWindow>
-#include "glwidget.h"
+#include <QSlider>
+#include <QSpinBox>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QBoxLayout>
+
+#include "canvas.h"
 
 class MainWindow : public QWidget
 {
@@ -12,5 +21,18 @@ public:
     ~MainWindow();
 
 private:
-    GLWidget *glWidget;
+    void setupCanvas2D();
+    Canvas *m_canvas;
+
+    void addHeading(QBoxLayout *layout, QString text);
+    void addLabel(QBoxLayout *layout, QString text);
+    void onClearButtonClick();
+    void onUploadButtonClick();
+    void onSaveButtonClick();
+    void setUIntVal(std::uint8_t &setValue, int newValue);
+    void setIntVal(int &setValue, int newValue);
+    void setFloatVal(float &setValue, float newValue);
+    void setBoolVal(bool &setValue, bool newValue);
+    void setupCanvas();
+    void addPushButton(QBoxLayout *layout, QString text, auto function);
 };

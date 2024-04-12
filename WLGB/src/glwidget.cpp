@@ -55,85 +55,85 @@ GLWidget::~GLWidget()
 
 // ================== Basic OpenGL Overrides
 
-void GLWidget::initializeGL()
-{
-    // Initialize GL extension wrangler
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK) fprintf(stderr, "Error while initializing GLEW: %s\n", glewGetErrorString(err));
-    fprintf(stdout, "Successfully initialized GLEW %s\n", glewGetString(GLEW_VERSION));
+//void GLWidget::initializeGL()
+//{
+//    // Initialize GL extension wrangler
+//    glewExperimental = GL_TRUE;
+//    GLenum err = glewInit();
+//    if (err != GLEW_OK) fprintf(stderr, "Error while initializing GLEW: %s\n", glewGetErrorString(err));
+//    fprintf(stdout, "Successfully initialized GLEW %s\n", glewGetString(GLEW_VERSION));
 
-    // Set clear color to white
-    glClearColor(1, 1, 1, 1);
+//    // Set clear color to white
+//    glClearColor(1, 1, 1, 1);
 
-    // Enable depth-testing and backface culling
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+//    // Enable depth-testing and backface culling
+//    glEnable(GL_DEPTH_TEST);
+//    glEnable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
 
-    // Initialize shaders
-    m_defaultShader = new Shader(":resources/shaders/shader.vert",      ":resources/shaders/shader.frag");
-    m_pointShader   = new Shader(":resources/shaders/anchorPoint.vert", ":resources/shaders/anchorPoint.geom", ":resources/shaders/anchorPoint.frag");
+//    // Initialize shaders
+//    m_defaultShader = new Shader(":resources/shaders/shader.vert",      ":resources/shaders/shader.frag");
+//    m_pointShader   = new Shader(":resources/shaders/anchorPoint.vert", ":resources/shaders/anchorPoint.geom", ":resources/shaders/anchorPoint.frag");
 
-    // Initialize ARAP, and get parameters needed to decide the camera position, etc
-    Vector3f coeffMin, coeffMax;
-    // m_arap.init(coeffMin, coeffMax);
+//    // Initialize ARAP, and get parameters needed to decide the camera position, etc
+//    Vector3f coeffMin, coeffMax;
+//    // m_arap.init(coeffMin, coeffMax);
 
-    Vector3f center = (coeffMax + coeffMin) / 2.0f;
-    float extentLength  = (coeffMax - coeffMin).norm();
+//    Vector3f center = (coeffMax + coeffMin) / 2.0f;
+//    float extentLength  = (coeffMax - coeffMin).norm();
 
-    // Screen-space size of vertex points
-    m_vSize = 0.005 * extentLength;
+//    // Screen-space size of vertex points
+//    m_vSize = 0.005 * extentLength;
 
-    // Scale all movement by this amount
-    m_movementScaling = extentLength * 0.5;
+//    // Scale all movement by this amount
+//    m_movementScaling = extentLength * 0.5;
 
-    // When raycasting, select closest vertex within this distance
-    m_vertexSelectionThreshold = extentLength * 0.025;
+//    // When raycasting, select closest vertex within this distance
+//    m_vertexSelectionThreshold = extentLength * 0.025;
 
-    // Note for maintainers: Z-up
-    float fovY = 120;
-    float nearPlane = 0.0001f;
-    float farPlane  = 3 * extentLength;
+//    // Note for maintainers: Z-up
+//    float fovY = 120;
+//    float nearPlane = 0.0001f;
+//    float farPlane  = 3 * extentLength;
 
-    // Initialize camera with a reasonable transform
-    Eigen::Vector3f eye    = center - Eigen::Vector3f::UnitZ() * extentLength;
-    Eigen::Vector3f target = center;
-    m_camera.lookAt(eye, target);
-    m_camera.setOrbitPoint(target);
-    m_camera.setPerspective(120, width() / static_cast<float>(height()), nearPlane, farPlane);
+//    // Initialize camera with a reasonable transform
+//    Eigen::Vector3f eye    = center - Eigen::Vector3f::UnitZ() * extentLength;
+//    Eigen::Vector3f target = center;
+//    m_camera.lookAt(eye, target);
+//    m_camera.setOrbitPoint(target);
+//    m_camera.setPerspective(120, width() / static_cast<float>(height()), nearPlane, farPlane);
 
-    m_deltaTimeProvider.start();
-    m_intervalTimer.start(1000 / 60);
-}
+//    m_deltaTimeProvider.start();
+//    m_intervalTimer.start(1000 / 60);
+//}
 
-void GLWidget::paintGL()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//void GLWidget::paintGL()
+//{
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_defaultShader->bind();
-    m_defaultShader->setUniform("proj", m_camera.getProjection());
-    m_defaultShader->setUniform("view", m_camera.getView());
-    // m_arap.draw(m_defaultShader, GL_TRIANGLES);
-    m_defaultShader->unbind();
+//    m_defaultShader->bind();
+//    m_defaultShader->setUniform("proj", m_camera.getProjection());
+//    m_defaultShader->setUniform("view", m_camera.getView());
+//    // m_arap.draw(m_defaultShader, GL_TRIANGLES);
+//    m_defaultShader->unbind();
 
-    glClear(GL_DEPTH_BUFFER_BIT);
+//    glClear(GL_DEPTH_BUFFER_BIT);
 
-    m_pointShader->bind();
-    m_pointShader->setUniform("proj",   m_camera.getProjection());
-    m_pointShader->setUniform("view",   m_camera.getView());
-    m_pointShader->setUniform("vSize",  m_vSize);
-    m_pointShader->setUniform("width",  width());
-    m_pointShader->setUniform("height", height());
-    // m_arap.draw(m_pointShader, GL_POINTS);
-    m_pointShader->unbind();
-}
+//    m_pointShader->bind();
+//    m_pointShader->setUniform("proj",   m_camera.getProjection());
+//    m_pointShader->setUniform("view",   m_camera.getView());
+//    m_pointShader->setUniform("vSize",  m_vSize);
+//    m_pointShader->setUniform("width",  width());
+//    m_pointShader->setUniform("height", height());
+//    // m_arap.draw(m_pointShader, GL_POINTS);
+//    m_pointShader->unbind();
+//}
 
-void GLWidget::resizeGL(int w, int h)
-{
-    glViewport(0, 0, w, h);
-    m_camera.setAspect(static_cast<float>(w) / h);
-}
+//void GLWidget::resizeGL(int w, int h)
+//{
+//    glViewport(0, 0, w, h);
+//    m_camera.setAspect(static_cast<float>(w) / h);
+//}
 
 // ================== Event Listeners
 
