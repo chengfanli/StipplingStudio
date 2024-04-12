@@ -57,8 +57,8 @@ public:
 
 public:
     WLBG();
-    std::vector<Stipple> stippling(MainWindow &w, WLBG *wlbg);
-    void paint(MainWindow &w, std::vector<Stipple> points, int iteration);
+    std::vector<Stipple> stippling(Canvas *m_canvas, WLBG *wlbg);
+    void paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration);
 
     // stipples
     std::vector<Stipple> init_stipples();

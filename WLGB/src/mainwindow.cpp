@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "settings.h"
+#include "wlbg.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -60,6 +61,7 @@ MainWindow::MainWindow()
     // filter push buttons
     addPushButton(layout, "Load Image", &MainWindow::onUploadButtonClick);
     addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
+    addPushButton(layout, "Stippling", &MainWindow::onStippleButtonClick);
 }
 
 
@@ -136,6 +138,14 @@ void MainWindow::setBoolVal(bool &setValue, bool newValue) {
 void MainWindow::onClearButtonClick() {
     m_canvas->resize(m_canvas->parentWidget()->size().width(), m_canvas->parentWidget()->size().height());
     m_canvas->clearCanvas();
+}
+
+void MainWindow::onStippleButtonClick() {
+    // stippling
+    WLBG m_wlbg = WLBG();
+    std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg);
+    std::cout << "finish" << std::endl;
+//    m_wlbg.paint(m_canvas, stipples, 5);
 }
 
 void MainWindow::onUploadButtonClick() {

@@ -11,8 +11,8 @@
  */
 void Canvas::init() {
     setMouseTracking(true);
-    m_width = 500;
-    m_height = 500;
+    m_width = 1000;
+    m_height = 1200;
     clearCanvas();
 }
 
@@ -22,7 +22,8 @@ void Canvas::init() {
 void Canvas::clearCanvas() {
     m_data.assign(m_width * m_height, RGBA{255, 255, 255, 255});
     settings.image_path = "";
-    displayImage();
+    QImage emptyImage; // Default constructor creates an empty image
+    displayImage(emptyImage);
 }
 
 
@@ -49,7 +50,8 @@ bool Canvas::loadImageFromFile(const QString &file) {
     for (int i = 0; i < arr.size() / 4.f; i++){
         m_data.push_back(RGBA{(std::uint8_t) arr[4*i], (std::uint8_t) arr[4*i+1], (std::uint8_t) arr[4*i+2], (std::uint8_t) arr[4*i+3]});
     }
-    displayImage();
+    QImage emptyImage;
+    displayImage(emptyImage);
     return true;
 }
 
@@ -74,9 +76,17 @@ bool Canvas::saveImageToFile(const QString &file) {
 /**
  * @brief Get Canvas2D's image data and display this to the GUI
  */
-void Canvas::displayImage() {
-    QByteArray* img = new QByteArray(reinterpret_cast<const char*>(m_data.data()), 4*m_data.size());
-    QImage now = QImage((const uchar*)img->data(), m_width, m_height, QImage::Format_RGBX8888);
+void Canvas::displayImage(QImage image) {
+    QImage now;
+    if (image.isNull())
+    {
+        QByteArray* img = new QByteArray(reinterpret_cast<const char*>(m_data.data()), 4*m_data.size());
+        now = QImage((const uchar*)img->data(), m_width, m_height, QImage::Format_RGBX8888);
+    }
+    else
+    {
+        now = image;
+    }
     setPixmap(QPixmap::fromImage(now));
     setFixedSize(m_width, m_height);
     update();
@@ -91,7 +101,8 @@ void Canvas::resize(int w, int h) {
     m_width = w;
     m_height = h;
     m_data.resize(w * h);
-    displayImage();
+    QImage emptyImage;
+    displayImage(emptyImage);
 }
 
 

@@ -17,12 +17,13 @@ class MainWindow : public QWidget
     Q_OBJECT
 
 public:
+    Canvas *m_canvas;
     MainWindow();
     ~MainWindow();
 
 private:
     void setupCanvas2D();
-    Canvas *m_canvas;
+
 
     void addHeading(QBoxLayout *layout, QString text);
     void addLabel(QBoxLayout *layout, QString text);
@@ -35,4 +36,6 @@ private:
     void setBoolVal(bool &setValue, bool newValue);
     void setupCanvas();
     void addPushButton(QBoxLayout *layout, QString text, auto function);
+
+    void onStippleButtonClick();
 };

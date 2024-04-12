@@ -61,11 +61,8 @@ int main(int argc, char *argv[])
     // Create a GUI window
     MainWindow w;
 
-    // stippling
-    WLBG m_wlbg = WLBG();
-    std::vector<Stipple> stipples = m_wlbg.stippling(w, &m_wlbg);
-    std::cout << "finish" << std::endl;
-    m_wlbg.paint(w, stipples, 5);
+
+
 
     w.show();
 
