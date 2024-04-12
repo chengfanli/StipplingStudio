@@ -8,8 +8,13 @@
 #include <set>
 //#include <omp.h>
 #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+
+#include "mainwindow.h"
+
 #include <QImage>
 #include <QVector>
+#include <QScreen>
+//#include <QMainWindow>
 
 #include <QOffscreenSurface>
 #include <QOpenGLContext>
@@ -48,10 +53,12 @@ public:
     QOpenGLFramebufferObject* m_fbo;
     int m_coneVertices;
 
+    QMainWindow m_window;
+
 public:
     WLBG();
-    std::vector<Stipple> stippling();
-    void paint(std::vector<Stipple> points);
+    std::vector<Stipple> stippling(MainWindow &w, WLBG *wlbg);
+    void paint(MainWindow &w, std::vector<Stipple> points, int iteration);
 
     // stipples
     std::vector<Stipple> init_stipples();

@@ -20,6 +20,7 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points)
     #pragma omp parallel for collapse(2)
     for (int x = 0; x < m_density.width(); ++x)
     {
+//        std::cout << x << " " << std::endl;
         for (int y = 0; y < m_density.height(); ++y)
         {
             QRgb densityPixel = m_density.pixel(x, y);

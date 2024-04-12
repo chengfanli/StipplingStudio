@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+//#include "mainwindow.h"
 #include "wlbg.h"
 #include <cstdlib>
 #include <ctime>
@@ -6,7 +6,7 @@
 #include <QApplication>
 #include <QSurfaceFormat>
 #include <QScreen>
-
+#include <QLabel>
 #include "settings.h"
 
 #include <QCommandLineParser>
@@ -56,22 +56,18 @@ int main(int argc, char *argv[])
     settings.hysteresis_delta = input.value("WLBG/hysteresis_delta").toFloat();
     settings.adaptive_stipple_size = input.value("WLBG/adaptive_stipple_size").toBool();
 
-    // stippling
-    WLBG m_wlbg = WLBG();
-    std::vector<Stipple> stipples = m_wlbg.stippling();
-    std::cout << "finish" << std::endl;
-    m_wlbg.paint(stipples);
+
 
     // Create a GUI window
     MainWindow w;
-    w.resize(600, 500);
-    int desktopArea = QGuiApplication::primaryScreen()->size().width() *
-                      QGuiApplication::primaryScreen()->size().height();
-    int widgetArea = w.width() * w.height();
-    if (((float)widgetArea / (float)desktopArea) < 0.75f)
-        w.show();
-    else
-        w.showMaximized();
+
+    // stippling
+    WLBG m_wlbg = WLBG();
+    std::vector<Stipple> stipples = m_wlbg.stippling(w, &m_wlbg);
+    std::cout << "finish" << std::endl;
+    m_wlbg.paint(w, stipples, 5);
+
+//    w.show();
 
     return a.exec();
 }

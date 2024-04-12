@@ -4,7 +4,7 @@
 #define GL_SILENCE_DEPRECATION
 #endif
 
-#include "wlbg.h"
+//#include "wlbg.h"
 #include "graphics/camera.h"
 #include "graphics/shader.h"
 
