@@ -16,6 +16,8 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 
+
+
 struct Stipple
 {
     Eigen::Vector2f pos;

@@ -30,6 +30,7 @@ float WLBG::current_stipple_size(Cell cell)
     if (settings.adaptive_stipple_size)
     {
         // TODO
+        return settings.init_stipple_size;
     }
     else
         return settings.init_stipple_size;
