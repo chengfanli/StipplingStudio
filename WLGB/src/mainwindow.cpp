@@ -16,7 +16,7 @@ MainWindow::MainWindow()
     setWindowTitle("Stippling");
 
     // loads in settings from last run or uses default values
-    settings.loadSettingsOrDefaults();
+//    settings.loadSettingsOrDefaults();
 
     QHBoxLayout *hLayout = new QHBoxLayout(); // horizontal layout for canvas and controls panel
     QVBoxLayout *vLayout = new QVBoxLayout(); // vertical layout for control panel
@@ -26,10 +26,10 @@ MainWindow::MainWindow()
     hLayout->addLayout(vLayout);
     setLayout(hLayout);
 
-    setupCanvas2D();
+    setupCanvas();
     resize(800, 600);
 
-    // makes the canvas into a scroll area
+//     makes the canvas into a scroll area
     QScrollArea *scrollArea = new QScrollArea();
     scrollArea->setWidget(m_canvas);
     scrollArea->setWidgetResizable(true);
@@ -47,12 +47,12 @@ MainWindow::MainWindow()
     controlsScroll->setWidget(tabs);
     controlsScroll->setWidgetResizable(true);
 
-    tabs->addTab(group, "group");
+    tabs->addTab(group, "Settings");
 
     vLayout->addWidget(controlsScroll);
 
     // brush selection
-    addHeading(layout, "group");
+//    addHeading(layout, "group");
 
     // clearing canvas
     addPushButton(layout, "Clear canvas", &MainWindow::onClearButtonClick);
@@ -60,6 +60,11 @@ MainWindow::MainWindow()
     // filter push buttons
     addPushButton(layout, "Load Image", &MainWindow::onUploadButtonClick);
     addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
+}
+
+
+MainWindow::~MainWindow() {
+    // Your cleanup code here, if any
 }
 
 /**
