@@ -10,11 +10,11 @@
 #include <QImage>
 #include <QVector>
 
-#include <QOffscreenSurface>
-#include <QOpenGLContext>
-#include <QOpenGLFramebufferObject>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLVertexArrayObject>
+// #include <QOffscreenSurface>
+// #include <QOpenGLContext>
+// #include <QOpenGLFramebufferObject>
+// #include <QOpenGLShaderProgram>
+// #include <QOpenGLVertexArrayObject>
 
 
 
@@ -41,13 +41,13 @@ public:
     QImage m_image;
     QImage m_density;
 
-    // voronoi gpu
-    QOpenGLContext* m_context;
-    QOffscreenSurface* m_surface;
-    QOpenGLVertexArrayObject* m_vao;
-    QOpenGLShaderProgram* m_shaderProgram;
-    QOpenGLFramebufferObject* m_fbo;
-    int m_coneVertices;
+    // // voronoi gpu
+    // QOpenGLContext* m_context;
+    // QOffscreenSurface* m_surface;
+    // QOpenGLVertexArrayObject* m_vao;
+    // QOpenGLShaderProgram* m_shaderProgram;
+    // QOpenGLFramebufferObject* m_fbo;
+    // int m_coneVertices;
 
 public:
     WLBG();
@@ -64,8 +64,8 @@ public:
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size);
 
     // voronoi gpu
-    void init_voronoi_context();
-    IndexMap calculate(const QVector<QVector2D>& points);
+    // void init_voronoi_context();
+    // IndexMap calculate(const QVector<QVector2D>& points);
     std::vector<Cell> generate_voronoi_cells_gpu(std::vector<Stipple> points);
     std::vector<Cell> accumulateCells(const IndexMap& map);
 
