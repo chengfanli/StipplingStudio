@@ -68,6 +68,8 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
         num_merge = 0;
 
         m_wlbg->paint(m_canvas, stipples, i);
+
+        // Handle other events, allowing GUI updates
         QCoreApplication::processEvents();
     }
 
