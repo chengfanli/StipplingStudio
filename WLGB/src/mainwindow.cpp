@@ -28,7 +28,7 @@ MainWindow::MainWindow()
     setLayout(hLayout);
 
     setupCanvas();
-    resize(800, 600);
+    resize(1200, 1000);
 
 //     makes the canvas into a scroll area
     QScrollArea *scrollArea = new QScrollArea();

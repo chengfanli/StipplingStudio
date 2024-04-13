@@ -44,6 +44,7 @@ class WLBG
 public:
     QImage m_image;
     QImage m_density;
+    QSize m_size;
 
     // voronoi gpu
     QOpenGLContext* m_context;

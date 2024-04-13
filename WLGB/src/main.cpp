@@ -61,9 +61,6 @@ int main(int argc, char *argv[])
     // Create a GUI window
     MainWindow w;
 
-
-
-
     w.show();
 
     return a.exec();
