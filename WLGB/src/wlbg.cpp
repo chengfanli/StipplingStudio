@@ -10,6 +10,7 @@
 #include <QPainter>
 #include <vector>
 #include <QLabel>
+#include <QCoreApplication>
 
 using namespace Eigen;
 
@@ -35,7 +36,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
 
     for (int i = 0; i < settings.max_iteration; i++)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+//        std::this_thread::sleep_for(std::chrono::seconds(1));
         std::cout << "Iteration: " << i << std::endl;
 
         // cells
@@ -67,6 +68,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
         num_merge = 0;
 
         m_wlbg->paint(m_canvas, stipples, i);
+        QCoreApplication::processEvents();
     }
 
     return stipples;
@@ -103,13 +105,16 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
 //    w.resize(1200, 1200);
 
-//    m_canvas->displayImage(image); // Update the canvas display
-    emit m_canvas->imageUpdated(m_canvas, image);
+    m_canvas->displayImage(image); // Update the canvas display
+//    emit m_canvas->imageUpdated(m_canvas, image);
+
+    // Now schedule the displayImage call on the main thread
+    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
+                              Q_ARG(QImage, image));
+
 
      // Save the image
     image.save(filePath);
 }
 
-void WLBG::updateCanvas(Canvas *m_canvas, QImage image) {
-    m_canvas->displayImage(image);
-}
+

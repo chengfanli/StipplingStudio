@@ -18,7 +18,7 @@ public:
     void clearCanvas();
     bool loadImageFromFile(const QString &file);
     bool saveImageToFile(const QString &file);
-    Q_INVOKABLE void displayImage(QImage image);
+//    Q_INVOKABLE void displayImage(QImage image);
     void resize(int w, int h);
 
     // This will be called when the settings have changed
@@ -28,6 +28,8 @@ public:
 
     std::vector<RGBA> &getCanvasData() {return m_data;}
 
+public slots: // If using Qt 5 or earlier, or if you prefer slots
+    void displayImage(const QImage &image);
 
 private:
     std::vector<RGBA> m_data;

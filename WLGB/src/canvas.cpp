@@ -76,7 +76,7 @@ bool Canvas::saveImageToFile(const QString &file) {
 /**
  * @brief Get Canvas2D's image data and display this to the GUI
  */
-void Canvas::displayImage(QImage image) {
+void Canvas::displayImage(const QImage &image) {
     QImage now;
     if (image.isNull())
     {

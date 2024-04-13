@@ -144,6 +144,7 @@ void MainWindow::onStippleButtonClick() {
 //    // stippling
     WLBG m_wlbg = WLBG();
     std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg);
+
     std::cout << "finish" << std::endl;
 //    m_wlbg.paint(m_canvas, stipples, 5);
 

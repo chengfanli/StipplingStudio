@@ -81,6 +81,8 @@ public:
     float calculate_lower_density_bound(float point_size, float hysteresis);
     float calculate_upper_density_bound(float point_size, float hysteresis);
     Eigen::Vector2f jitter(Eigen::Vector2f s);
+
+
 };
 
 class IndexMap {
