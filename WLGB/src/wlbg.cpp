@@ -79,7 +79,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
 
 void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 {
-    std::cout << iteration << "！！ " << std::endl;
+    std::cout << "Start Painting" << std::endl;
 //    QSize imageSize(1200, 1000); // Set your desired image size
     QString filePath = settings.output_path; // Set your desired file path
 
