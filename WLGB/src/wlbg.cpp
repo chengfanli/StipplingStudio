@@ -2,9 +2,9 @@
 #include "settings.h"
 
 #include <iostream>
-#include <set>
 #include <QPainter>
 #include <vector>
+
 
 using namespace Eigen;
 
@@ -90,4 +90,20 @@ void WLBG::paint(std::vector<Stipple> points)
     // Save the image
     image.save(filePath);
 }
+
+// Index Map
+IndexMap::IndexMap(int32_t w, int32_t h, int32_t count)
+    : width(w), height(h), m_numEncoded(count) {
+    m_data = QVector<uint32_t>(w * h);
+}
+
+void IndexMap::set(const int32_t x, const int32_t y, const uint32_t value) {
+    m_data[y * width + x] = value;
+}
+
+uint32_t IndexMap::get(const int32_t x, const int32_t y) const {
+    return m_data[y * width + x];
+}
+
+int32_t IndexMap::count() const { return m_numEncoded; }
 

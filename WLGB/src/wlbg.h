@@ -10,11 +10,13 @@
 #include <QImage>
 #include <QVector>
 
-#include <QOffscreenSurface>
-#include <QOpenGLContext>
-#include <QOpenGLFramebufferObject>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLVertexArrayObject>
+#include "jc_voronoi.h"
+
+// #include <QOffscreenSurface>
+// #include <QOpenGLContext>
+// #include <QOpenGLFramebufferObject>
+// #include <QOpenGLShaderProgram>
+// #include <QOpenGLVertexArrayObject>
 
 struct Stipple
 {
@@ -39,14 +41,6 @@ public:
     QImage m_image;
     QImage m_density;
 
-    // voronoi gpu
-    QOpenGLContext* m_context;
-    QOffscreenSurface* m_surface;
-    QOpenGLVertexArrayObject* m_vao;
-    QOpenGLShaderProgram* m_shaderProgram;
-    QOpenGLFramebufferObject* m_fbo;
-    int m_coneVertices;
-
 public:
     WLBG();
     std::vector<Stipple> stippling();
@@ -58,13 +52,7 @@ public:
 
     // voronoi
     std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points);
-    QImage generate_voronoi_diagram();
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size);
-
-    // voronoi gpu
-    void init_voronoi_context();
-    IndexMap calculate(const QVector<QVector2D>& points);
-    std::vector<Cell> generate_voronoi_cells_gpu(std::vector<Stipple> points);
     std::vector<Cell> accumulateCells(const IndexMap& map);
 
     // utils
@@ -72,8 +60,14 @@ public:
     float calculate_lower_density_bound(float point_size, float hysteresis);
     float calculate_upper_density_bound(float point_size, float hysteresis);
     Eigen::Vector2f jitter(Eigen::Vector2f s);
+    int min2(int a, int b);
+    int max2(int a, int b);
+    int min3(int a, int b, int c);
+    int max3(int a, int b, int c);
+    bool isInsideTriangle(jcv_point a, jcv_point b, jcv_point c, jcv_point p);
 };
 
+// Index Map
 class IndexMap {
 public:
     int32_t width;
@@ -89,6 +83,7 @@ private:
     QVector<uint32_t> m_data;
 };
 
+// Moment
 struct Moments {
     float moment00;
     float moment10;

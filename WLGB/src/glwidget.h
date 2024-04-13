@@ -4,16 +4,13 @@
 #define GL_SILENCE_DEPRECATION
 #endif
 
-#include "wlbg.h"
 #include "graphics/camera.h"
 #include "graphics/shader.h"
-
 #include "graphics/shape.h"
 
 #include <QOpenGLWidget>
 #include <QElapsedTimer>
 #include <QTimer>
-#include <memory>
 
 class GLWidget : public QOpenGLWidget
 {

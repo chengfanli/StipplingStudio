@@ -2,7 +2,6 @@
 #define SETTINGS_H
 
 #include <string>
-#include <unordered_set>
 
 struct Settings {
     // IO
