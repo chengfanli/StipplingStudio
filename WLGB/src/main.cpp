@@ -6,7 +6,7 @@
 #include <QApplication>
 #include <QSurfaceFormat>
 #include <QScreen>
-
+#include <QLabel>
 #include "settings.h"
 
 #include <QCommandLineParser>
@@ -24,10 +24,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
     // Set OpenGL version to 4.1 and context to Core
-    QSurfaceFormat fmt;
-    fmt.setVersion(4, 1);
-    fmt.setProfile(QSurfaceFormat::CoreProfile);
-    QSurfaceFormat::setDefaultFormat(fmt);
+//    QSurfaceFormat fmt;
+//    fmt.setVersion(4, 1);
+//    fmt.setProfile(QSurfaceFormat::CoreProfile);
+//    QSurfaceFormat::setDefaultFormat(fmt);
 
     // Parse input
     QCommandLineParser parser;
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     // settings
     QSettings input( args[0], QSettings::IniFormat);
     // IO
-    settings.image_path = input.value("IO/image_path").toString().toStdString();
-    settings.output_path = input.value("IO/output_path").toString().toStdString();
+    settings.image_path = QString::fromStdString(input.value("IO/image_path").toString().toStdString());
+    settings.output_path = QString::fromStdString(input.value("IO/output_path").toString().toStdString());
     // stipple init
     settings.init_stipple_num = input.value("INIT/init_stipple_num").toInt();
     settings.init_stipple_size = input.value("INIT/init_stipple_size").toFloat();
@@ -56,22 +56,12 @@ int main(int argc, char *argv[])
     settings.hysteresis_delta = input.value("WLBG/hysteresis_delta").toFloat();
     settings.adaptive_stipple_size = input.value("WLBG/adaptive_stipple_size").toBool();
 
-    // stippling
-    WLBG m_wlbg = WLBG();
-    std::vector<Stipple> stipples = m_wlbg.stippling();
-    std::cout << "finish" << std::endl;
-    m_wlbg.paint(stipples);
+
 
     // Create a GUI window
     MainWindow w;
-    w.resize(600, 500);
-    int desktopArea = QGuiApplication::primaryScreen()->size().width() *
-                      QGuiApplication::primaryScreen()->size().height();
-    int widgetArea = w.width() * w.height();
-    if (((float)widgetArea / (float)desktopArea) < 0.75f)
-        w.show();
-    else
-        w.showMaximized();
+
+    w.show();
 
     return a.exec();
 }

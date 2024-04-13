@@ -6,9 +6,15 @@
 #include "Eigen/Sparse"
 
 #include <set>
-#include <omp.h>
+//#include <omp.h>
+#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+
+#include "mainwindow.h"
+
 #include <QImage>
 #include <QVector>
+#include <QScreen>
+//#include <QMainWindow>
 
 #include "jc_voronoi.h"
 
@@ -40,11 +46,25 @@ class WLBG
 public:
     QImage m_image;
     QImage m_density;
+    QSize m_size;
 
+<<<<<<< HEAD
+=======
+    // voronoi gpu
+    QOpenGLContext* m_context;
+    QOffscreenSurface* m_surface;
+    QOpenGLVertexArrayObject* m_vao;
+    QOpenGLShaderProgram* m_shaderProgram;
+    QOpenGLFramebufferObject* m_fbo;
+    int m_coneVertices;
+
+    QMainWindow m_window;
+
+>>>>>>> yixuan
 public:
     WLBG();
-    std::vector<Stipple> stippling();
-    void paint(std::vector<Stipple> points);
+    std::vector<Stipple> stippling(Canvas *m_canvas, WLBG *wlbg);
+    void paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration);
 
     // stipples
     std::vector<Stipple> init_stipples();

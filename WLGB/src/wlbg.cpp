@@ -1,23 +1,32 @@
 #include "wlbg.h"
+#include "QtWidgets/qboxlayout.h"
 #include "settings.h"
+#include "mainwindow.h"
 
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include <set>
 #include <QPainter>
 #include <vector>
+#include <QLabel>
+#include <QCoreApplication>
 
 
 using namespace Eigen;
 
 WLBG::WLBG()
 {
-    m_image = QImage(QString::fromStdString(settings.image_path));
+    m_image = QImage(settings.image_path);
     m_density = m_image.scaledToWidth(
             settings.supersampling_factor * m_image.width(),
             Qt::SmoothTransformation
         ).convertToFormat(QImage::Format_Grayscale8);
+    m_size = m_image.size();
+
 }
 
-std::vector<Stipple> WLBG::stippling()
+std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
 {
     // init
     std::vector<Stipple> stipples = init_stipples();
@@ -28,6 +37,7 @@ std::vector<Stipple> WLBG::stippling()
 
     for (int i = 0; i < settings.max_iteration; i++)
     {
+//        std::this_thread::sleep_for(std::chrono::seconds(1));
         std::cout << "Iteration: " << i << std::endl;
 
         // cells
@@ -57,17 +67,23 @@ std::vector<Stipple> WLBG::stippling()
             break;
         num_split = 0;
         num_merge = 0;
+
+        m_wlbg->paint(m_canvas, stipples, i);
+
+        // Handle other events, allowing GUI updates
+        QCoreApplication::processEvents();
     }
 
     return stipples;
 }
 
-void WLBG::paint(std::vector<Stipple> points)
+void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 {
-    QSize imageSize(1200, 1000); // Set your desired image size
-    QString filePath = QString::fromStdString(settings.output_path); // Set your desired file path
+    std::cout << iteration << "！！ " << std::endl;
+//    QSize imageSize(1200, 1000); // Set your desired image size
+    QString filePath = settings.output_path; // Set your desired file path
 
-    QImage image(imageSize, QImage::Format_ARGB32);
+    QImage image(m_size,  QImage::Format_RGBX8888);
     image.fill(Qt::white); // Fill the background with white
 
     QPainter painter(&image);
@@ -76,7 +92,7 @@ void WLBG::paint(std::vector<Stipple> points)
     // Draw each stipple
     for (const auto& stipple : points)
     {
-        QPointF center(stipple.pos.x() * imageSize.width(), stipple.pos.y() * imageSize.height());
+        QPointF center(stipple.pos.x() * m_size.width(), stipple.pos.y() * m_size.height());
         qreal radius = stipple.size / 2.0; // Assuming size is the diameter
 
         // Set brush and pen for this stipple
@@ -87,10 +103,24 @@ void WLBG::paint(std::vector<Stipple> points)
         painter.drawEllipse(center, radius, radius);
     }
 
-    // Save the image
+
+
+
+//    w.resize(1200, 1200);
+
+    m_canvas->displayImage(image); // Update the canvas display
+//    emit m_canvas->imageUpdated(m_canvas, image);
+
+    // Now schedule the displayImage call on the main thread
+    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
+                              Q_ARG(QImage, image));
+
+
+     // Save the image
     image.save(filePath);
 }
 
+<<<<<<< HEAD
 // Index Map
 IndexMap::IndexMap(int32_t w, int32_t h, int32_t count)
     : width(w), height(h), m_numEncoded(count) {
@@ -106,4 +136,6 @@ uint32_t IndexMap::get(const int32_t x, const int32_t y) const {
 }
 
 int32_t IndexMap::count() const { return m_numEncoded; }
+=======
+>>>>>>> yixuan
 
