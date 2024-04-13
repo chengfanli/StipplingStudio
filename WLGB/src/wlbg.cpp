@@ -21,6 +21,7 @@ WLBG::WLBG()
             Qt::SmoothTransformation
         ).convertToFormat(QImage::Format_Grayscale8);
     m_size = m_image.size();
+
 }
 
 std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
@@ -34,7 +35,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
 
     for (int i = 0; i < settings.max_iteration; i++)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(3));
         std::cout << "Iteration: " << i << std::endl;
 
         // cells
@@ -77,7 +78,7 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 //    QSize imageSize(1200, 1000); // Set your desired image size
     QString filePath = settings.output_path; // Set your desired file path
 
-    QImage image(m_size, QImage::Format_ARGB32);
+    QImage image(m_size,  QImage::Format_RGBX8888);
     image.fill(Qt::white); // Fill the background with white
 
     QPainter painter(&image);
@@ -97,19 +98,18 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
         painter.drawEllipse(center, radius, radius);
     }
 
-    // Save the image
-    image.save(filePath);
+
+
 
 //    w.resize(1200, 1200);
-    QByteArray arr = QByteArray::fromRawData((const char*) image.bits(), image.sizeInBytes());
 
-    std::vector<RGBA> m_data;
-    m_data.clear();
-    m_data.reserve(image.width() * image.height());
-    for (int i = 0; i < arr.size() / 4.f; i++){
-        m_data.push_back(RGBA{(std::uint8_t) arr[4*i], (std::uint8_t) arr[4*i+1], (std::uint8_t) arr[4*i+2], (std::uint8_t) arr[4*i+3]});
-    }
+    // 使用 invokeMethod 在主线程中更新画布
+    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
+                              Q_ARG(QImage, image));
 
-    m_canvas->displayImage(); // Update the canvas display
+//    m_canvas->displayImage(image); // Update the canvas display
+
+     // Save the image
+    image.save(filePath);
 }
 

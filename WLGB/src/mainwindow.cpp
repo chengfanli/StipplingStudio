@@ -76,9 +76,9 @@ void MainWindow::setupCanvas() {
     m_canvas = new Canvas();
     m_canvas->init();
 
-    if (!settings.image_path.isEmpty()) {
-        m_canvas->loadImageFromFile(settings.image_path);
-    }
+//    if (!settings.image_path.isEmpty()) {
+//        m_canvas->loadImageFromFile(settings.image_path);
+//    }
 }
 
 
@@ -141,11 +141,12 @@ void MainWindow::onClearButtonClick() {
 }
 
 void MainWindow::onStippleButtonClick() {
-    // stippling
+//    // stippling
     WLBG m_wlbg = WLBG();
     std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg);
     std::cout << "finish" << std::endl;
 //    m_wlbg.paint(m_canvas, stipples, 5);
+
 }
 
 void MainWindow::onUploadButtonClick() {

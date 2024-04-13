@@ -18,7 +18,7 @@ public:
     void clearCanvas();
     bool loadImageFromFile(const QString &file);
     bool saveImageToFile(const QString &file);
-    void displayImage();
+    Q_INVOKABLE void displayImage(QImage image);
     void resize(int w, int h);
 
     // This will be called when the settings have changed
