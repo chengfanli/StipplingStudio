@@ -6,8 +6,8 @@
 #include "Eigen/Sparse"
 
 #include <set>
-//#include <omp.h>
-#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+#include <omp.h>
+// #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 
 #include "mainwindow.h"
 
@@ -48,19 +48,6 @@ public:
     QImage m_density;
     QSize m_size;
 
-<<<<<<< HEAD
-=======
-    // voronoi gpu
-    QOpenGLContext* m_context;
-    QOffscreenSurface* m_surface;
-    QOpenGLVertexArrayObject* m_vao;
-    QOpenGLShaderProgram* m_shaderProgram;
-    QOpenGLFramebufferObject* m_fbo;
-    int m_coneVertices;
-
-    QMainWindow m_window;
-
->>>>>>> yixuan
 public:
     WLBG();
     std::vector<Stipple> stippling(Canvas *m_canvas, WLBG *wlbg);

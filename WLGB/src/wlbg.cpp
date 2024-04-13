@@ -120,7 +120,6 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
     image.save(filePath);
 }
 
-<<<<<<< HEAD
 // Index Map
 IndexMap::IndexMap(int32_t w, int32_t h, int32_t count)
     : width(w), height(h), m_numEncoded(count) {
@@ -136,6 +135,4 @@ uint32_t IndexMap::get(const int32_t x, const int32_t y) const {
 }
 
 int32_t IndexMap::count() const { return m_numEncoded; }
-=======
->>>>>>> yixuan
 

@@ -2,13 +2,8 @@
 
 #include <iostream>
 #include <vector>
-<<<<<<< HEAD
 #include <omp.h>
-=======
-#include <random>
-//#include <omp.h>
-#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
->>>>>>> yixuan
+// #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 
 #define JC_VORONOI_IMPLEMENTATION
 #include "jc_voronoi.h"
