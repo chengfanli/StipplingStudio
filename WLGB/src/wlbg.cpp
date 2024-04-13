@@ -103,13 +103,13 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
 //    w.resize(1200, 1200);
 
-    // 使用 invokeMethod 在主线程中更新画布
-    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
-                              Q_ARG(QImage, image));
-
 //    m_canvas->displayImage(image); // Update the canvas display
+    emit m_canvas->imageUpdated(m_canvas, image);
 
      // Save the image
     image.save(filePath);
 }
 
+void WLBG::updateCanvas(Canvas *m_canvas, QImage image) {
+    m_canvas->displayImage(image);
+}
