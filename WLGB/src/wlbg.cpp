@@ -103,9 +103,6 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
         painter.drawEllipse(center, radius, radius);
     }
 
-
-
-
 //    w.resize(1200, 1200);
 
     m_canvas->displayImage(image); // Update the canvas display

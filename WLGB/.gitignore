@@ -1,6 +1,8 @@
 User*
 !core/
 output/*
+!output/.gitkeep 
+classdemo/
 *.*#
 *.a
 *.app
