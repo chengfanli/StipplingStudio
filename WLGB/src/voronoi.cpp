@@ -7,6 +7,7 @@
 
 #define JC_VORONOI_IMPLEMENTATION
 #include "jc_voronoi.h"
+#include "src/draw.h"
 
 using namespace Eigen;
 
@@ -27,7 +28,7 @@ jcv_point* construct_jcv(const std::vector<Stipple> &points, const jcv_point* mi
     return jcv_points;
 }
 
-std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points)
+std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw &d)
 {
     jcv_diagram diagram;
     auto count = points.size();
@@ -37,6 +38,9 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points)
     jcv_point dimensions;
     dimensions.x = (jcv_real)m_density.width();
     dimensions.y = (jcv_real)m_density.height();
+
+    // whats the number of x and y?
+    d.init(dimensions.x, dimensions.y);
 
     jcv_point m;
     m.x = 0.0;
@@ -64,6 +68,7 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points)
         {
             jcv_point p0 = e->pos[0];
             jcv_point p1 = e->pos[1];
+            d.drawEdge(p0, p1, QColor(255, 192, 203));
 
             // Compute triangle bounding box
             jcv_point* v0 = &s;
