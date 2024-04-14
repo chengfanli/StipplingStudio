@@ -152,7 +152,7 @@ void MainWindow::onStippleButtonClick() {
 
 void MainWindow::onUploadButtonClick() {
     // Get new image path selected by user
-    QString file = QFileDialog::getOpenFileName(this, tr("Open Image"), QDir::homePath(), tr("Image Files (*.png *.jpg *.jpeg)"));
+    QString file = QFileDialog::getOpenFileName(this, tr("Open Image"), "./images", tr("Image Files (*.png *.jpg *.jpeg)"));
     if (file.isEmpty()) { return; }
     settings.image_path = file;
 
