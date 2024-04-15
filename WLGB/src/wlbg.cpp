@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QCoreApplication>
 
+#include "src/draw.h"
 
 using namespace Eigen;
 
@@ -37,11 +38,12 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
 
     for (int i = 0; i < settings.max_iteration; i++)
     {
+        draw d;
 //        std::this_thread::sleep_for(std::chrono::seconds(1));
         std::cout << "Iteration: " << i << std::endl;
 
         // cells
-        std::vector<Cell> voronoi_cells = generate_voronoi_cells(stipples);
+        std::vector<Cell> voronoi_cells = generate_voronoi_cells(stipples, d);
         std::cout << "Current number of points: " << stipples.size() << std::endl;
 
         // current hysteresis
@@ -52,14 +54,24 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
         {
             float point_size = current_stipple_size(cell);
 
-            if (cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) // merge
+            if (cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
                 num_merge++;
-            else if (cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) // keep
+                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+                d.drawX(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::red);
+            }
+            else if (cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
                 stipples.push_back({cell.centroid, point_size, Qt::black});
+                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+            }
             else // split
             {
                 num_split++;
                 split_cell(stipples, cell, point_size);
+                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+                auto last = stipples.back();
+                auto secondLast = stipples[stipples.size() - 2];
+                d.drawPoints(last.pos.x() * m_size.width(), last.pos.y() * m_size.height(), Qt::green);
+                d.drawPoints(secondLast.pos.x() * m_size.width(), secondLast.pos.y() * m_size.height(), Qt::green);
             }
         }
 
@@ -70,6 +82,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
 
         m_wlbg->paint(m_canvas, stipples, i);
 
+        d.endPaint(i);
         // Handle other events, allowing GUI updates
         QCoreApplication::processEvents();
     }
@@ -132,4 +145,3 @@ uint32_t IndexMap::get(const int32_t x, const int32_t y) const {
 }
 
 int32_t IndexMap::count() const { return m_numEncoded; }
-

@@ -17,6 +17,7 @@
 //#include <QMainWindow>
 
 #include "jc_voronoi.h"
+#include "draw.h"
 
 // #include <QOffscreenSurface>
 // #include <QOpenGLContext>
@@ -58,7 +59,7 @@ public:
     float current_stipple_size(Cell cell);
 
     // voronoi
-    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points);
+    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d);
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size);
     std::vector<Cell> accumulateCells(const IndexMap& map);
 
