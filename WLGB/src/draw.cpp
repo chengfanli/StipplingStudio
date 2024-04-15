@@ -32,8 +32,9 @@ void draw::drawX(float posx, float posy, QColor color) {
     painter.drawLine(posx - elipson, posy + elipson, posx + elipson, posy - elipson);
 }
 
-void draw::endPaint(int i) {
+void draw::endPaint(int i, Canvas *m_canvas) {
     painter.end();
     QString filename = QString("veronoi-images/veronoi%1.png").arg(i);
     image.save(filename);
+    m_canvas->displayImage(image);
 }

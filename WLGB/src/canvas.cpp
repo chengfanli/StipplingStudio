@@ -7,7 +7,7 @@
 #include "settings.h"
 
 /**
- * @brief Initializes new 500x500 canvas
+ * @brief Initializes new 1200x1200 canvas
  */
 void Canvas::init() {
     setMouseTracking(true);

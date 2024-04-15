@@ -6,8 +6,8 @@
 #include "Eigen/Sparse"
 
 #include <set>
-#include <omp.h>
-// #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+//#include <omp.h>
+ #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 
 #include "mainwindow.h"
 
@@ -51,7 +51,7 @@ public:
 
 public:
     WLBG();
-    std::vector<Stipple> stippling(Canvas *m_canvas, WLBG *wlbg);
+    std::vector<Stipple> stippling(Canvas *m_canvas, WLBG *wlbg, bool isVoronoi);
     void paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration);
 
     // stipples

@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QColor>
 #include "src/jc_voronoi.h"
+#include "mainwindow.h"
 
 class draw
 {
@@ -14,7 +15,7 @@ public:
     // void drawPoints(std::vector<Stipple> &stipples, QColor color);
     void drawPoints(float posx, float posy, QColor color);
     void drawX(float posx, float posy, QColor color);
-    void endPaint(int i);
+    void endPaint(int i, Canvas *m_canvas);
 
 private:
     QImage image;

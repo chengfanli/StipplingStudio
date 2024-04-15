@@ -60,8 +60,9 @@ MainWindow::MainWindow()
 
     // filter push buttons
     addPushButton(layout, "Load Image", &MainWindow::onUploadButtonClick);
-    addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
     addPushButton(layout, "Stippling", &MainWindow::onStippleButtonClick);
+    addPushButton(layout, "Draw Voronoi Diagram", &MainWindow::onDrawVoronoiButtonClick);
+//    addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
 }
 
 
@@ -143,11 +144,16 @@ void MainWindow::onClearButtonClick() {
 void MainWindow::onStippleButtonClick() {
 //    // stippling
     WLBG m_wlbg = WLBG();
-    std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg);
+    std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg, false);
 
     std::cout << "finish" << std::endl;
 //    m_wlbg.paint(m_canvas, stipples, 5);
 
+}
+
+void MainWindow::onDrawVoronoiButtonClick() {
+    WLBG m_wlbg = WLBG();
+    std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg, true);
 }
 
 void MainWindow::onUploadButtonClick() {

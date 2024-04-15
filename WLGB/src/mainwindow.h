@@ -38,4 +38,5 @@ private:
     void addPushButton(QBoxLayout *layout, QString text, auto function);
 
     void onStippleButtonClick();
+    void onDrawVoronoiButtonClick();
 };

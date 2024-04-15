@@ -27,7 +27,7 @@ WLBG::WLBG()
 
 }
 
-std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
+std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoronoi)
 {
     // init
     std::vector<Stipple> stipples = init_stipples();
@@ -80,9 +80,15 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg)
         num_split = 0;
         num_merge = 0;
 
-        m_wlbg->paint(m_canvas, stipples, i);
+        if (isVoronoi == true) {
+            d.endPaint(i, m_canvas);
+        }
+        else
+        {
+            m_wlbg->paint(m_canvas, stipples, i);
+        }
 
-        d.endPaint(i);
+
         // Handle other events, allowing GUI updates
         QCoreApplication::processEvents();
     }
@@ -122,8 +128,8 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 //    emit m_canvas->imageUpdated(m_canvas, image);
 
     // Now schedule the displayImage call on the main thread
-    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
-                              Q_ARG(QImage, image));
+//    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
+//                              Q_ARG(QImage, image));
 
 
      // Save the image

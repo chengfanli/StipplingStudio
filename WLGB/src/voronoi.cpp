@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include <vector>
-#include <omp.h>
-// #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+//#include <omp.h>
+ #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 
 #define JC_VORONOI_IMPLEMENTATION
 #include "jc_voronoi.h"
@@ -20,7 +20,10 @@ jcv_point* construct_jcv(const std::vector<Stipple> &points, const jcv_point* mi
     // Copy data from Stipple vector to jcv_point array in parallel
     #pragma omp parallel for
     for (size_t i = 0; i < points.size(); ++i) {
-        jcv_point p(points[i].pos[0] * scale->x, points[i].pos[1] * scale->y);
+//        jcv_point p(points[i].pos[0] * scale->x, points[i].pos[1] * scale->y);
+        jcv_point p;
+        p.x = points[i].pos[0] * scale->x;
+        p.y = points[i].pos[1] * scale->y;
         //jcv_point r = remap(&p, min, max, scale);
         jcv_points[i] = p;
     }
@@ -87,7 +90,9 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
             {
                 for (int x = minX; x <= maxX; x++)
                 {
-                    p = jcv_point(x, y);
+//                    p = jcv_point(x, y);
+                    p.x = x;
+                    p.y = y;
 
                     if (isInsideTriangle(p0, p1, s, p))
                         idxMap.set(p.x, p.y, (uint32_t)i);

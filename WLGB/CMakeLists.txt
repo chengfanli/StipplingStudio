@@ -61,8 +61,6 @@ add_executable(${PROJECT_NAME}
     src/mainwindow.h
     src/wlbg.h
 
-    util/tiny_obj_loader.h
-    util/unsupportedeigenthing/OpenGLSupport
     src/settings.cpp
     src/settings.h
     src/utils.cpp
@@ -90,7 +88,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Widgets
     Qt::Xml
     StaticGLEW
-    OpenMP::OpenMP_CXX
+#    OpenMP::OpenMP_CXX
 )
 
 # This allows you to `#include "Eigen/..."`
