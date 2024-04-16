@@ -88,7 +88,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Widgets
     Qt::Xml
     StaticGLEW
-#    OpenMP::OpenMP_CXX
+    # OpenMP::OpenMP_CXX
 )
 
 # This allows you to `#include "Eigen/..."`

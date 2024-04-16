@@ -2,12 +2,25 @@
 
 #include <iostream>
 #include <vector>
-//#include <omp.h>
- #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
 
 #define JC_VORONOI_IMPLEMENTATION
 #include "jc_voronoi.h"
 #include "src/draw.h"
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <omp.h>
+
+// Check for Mac OS
+#elif defined(__APPLE__) && defined(__MACH__)
+#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+
+// Check for Linux
+#elif defined(__linux__)
+#include <omp.h>
+
+#else
+#error "Unknown operating system"
+#endif
 
 using namespace Eigen;
 

@@ -107,8 +107,10 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing); // Optional: for smoother edges
+    painter.setPen(Qt::NoPen); // No border
 
     // Draw each stipple
+    // #pragma omp parallel for
     for (const auto& stipple : points)
     {
         QPointF center(stipple.pos.x() * m_size.width(), stipple.pos.y() * m_size.height());
@@ -116,7 +118,6 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
         // Set brush and pen for this stipple
         painter.setBrush(QBrush(stipple.color));
-        painter.setPen(Qt::NoPen); // No border
 
         // Draw the stipple
         painter.drawEllipse(center, radius, radius);
@@ -132,7 +133,7 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 //                              Q_ARG(QImage, image));
 
 
-     // Save the image
+    // Save the image
     image.save(filePath);
 }
 

@@ -6,8 +6,21 @@
 #include "Eigen/Sparse"
 
 #include <set>
-//#include <omp.h>
- #include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <omp.h>
+
+// Check for Mac OS
+#elif defined(__APPLE__) && defined(__MACH__)
+#include "/opt/homebrew/Cellar/libomp/18.1.3/include/omp.h"
+
+// Check for Linux
+#elif defined(__linux__)
+#include <omp.h>
+
+#else
+#error "Unknown operating system"
+#endif
 
 #include "mainwindow.h"
 
