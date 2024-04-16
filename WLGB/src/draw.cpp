@@ -34,7 +34,7 @@ void draw::drawX(float posx, float posy, QColor color) {
 
 void draw::endPaint(int i, Canvas *m_canvas) {
     painter.end();
-    QString filename = QString("veronoi-images/veronoi%1.png").arg(i);
+    QString filename = QString("voronoi-images/veronoi%1.png").arg(i);
     image.save(filename);
     m_canvas->displayImage(image);
 }
