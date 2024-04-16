@@ -6,9 +6,10 @@
 #include <vector>
 #include <random>
 
+using namespace std;
 using namespace Eigen;
 
-std::vector<Stipple> WLBG::init_stipples()
+pair<vector<Stipple>, vector<Stipple> > WLBG::init_stipples()
 {
     int init_num = settings.init_stipple_num;
     float init_size = settings.init_stipple_size;
@@ -17,12 +18,19 @@ std::vector<Stipple> WLBG::init_stipples()
     static std::mt19937 gen(rd());
 
     std::uniform_real_distribution<float> dis(0.01f, 0.99f);
-    std::vector<Stipple> stipples(init_num);
-    std::generate(stipples.begin(), stipples.end(), [&]() {
+    std::vector<Stipple> stipplesL1(init_num);
+    std::generate(stipplesL1.begin(), stipplesL1.end(), [&]() {
         return Stipple{Vector2f(dis(gen), dis(gen)), init_size,
                        Qt::black};
     });
-    return stipples;
+
+    std::vector<Stipple> stipplesL2(init_num);
+    std::generate(stipplesL2.begin(), stipplesL2.end(), [&]() {
+        return Stipple{Vector2f(dis(gen), dis(gen)), init_size,
+                       Qt::black};
+    });
+
+    return make_pair(stipplesL1, stipplesL2);
 }
 
 float WLBG::current_stipple_size(Cell cell)

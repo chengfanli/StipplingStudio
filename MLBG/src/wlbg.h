@@ -43,6 +43,8 @@ struct Stipple
     Eigen::Vector2f pos;
     float size;
     QColor color;
+    int layerId;
+    bool isShown;
 };
 
 struct Cell
@@ -68,7 +70,7 @@ public:
     void paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration);
 
     // stipples
-    std::vector<Stipple> init_stipples();
+    std::pair<std::vector<Stipple>, std::vector<Stipple> > init_stipples();
     float current_stipple_size(Cell cell);
 
     // voronoi
