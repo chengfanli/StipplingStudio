@@ -43,6 +43,11 @@ struct Stipple
     Eigen::Vector2f pos;
     float size;
     QColor color;
+
+    // animarion
+    bool moving;
+    Eigen::Vector2f aim_pos;
+    float speed;
 };
 
 struct Cell

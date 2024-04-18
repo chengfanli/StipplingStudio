@@ -22,6 +22,10 @@ struct Settings {
     float hysteresis_delta; // delta of hysteresis
     bool adaptive_stipple_size; // open adaptive size or not
 
+    // animation
+    bool point_animation; // open point moving animation
+    int animation_frame ; // frame of point moving
+
     void loadSettingsOrDefaults();
     void saveSettings();
 };

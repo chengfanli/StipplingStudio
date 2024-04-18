@@ -24,7 +24,6 @@ WLBG::WLBG()
             Qt::SmoothTransformation
         ).convertToFormat(QImage::Format_Grayscale8);
     m_size = m_image.size();
-
 }
 
 std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoronoi)
@@ -60,7 +59,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoro
                 d.drawX(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::red);
             }
             else if (cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
-                stipples.push_back({cell.centroid, point_size, Qt::black});
+                stipples.push_back({cell.centroid, point_size, Qt::black, false, cell.centroid, 0.0f});
                 d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
             }
             else // split
@@ -85,7 +84,28 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoro
         }
         else
         {
-            m_wlbg->paint(m_canvas, stipples, i);
+            if (settings.point_animation)
+            {
+                for (int f = 0; f < settings.animation_frame; f++)
+                {
+                    for (auto& s : stipples)
+                    {
+                        if (s.moving)
+                        {
+                            s.pos += (s.aim_pos - s.pos).normalized() * s.speed;
+                            if ((s.aim_pos - s.pos).norm() <= s.speed)
+                            {
+                                s.moving = false;
+                                s.pos = s.aim_pos;
+                            }
+                        }
+                    }
+                    m_wlbg->paint(m_canvas, stipples, i);
+                    QCoreApplication::processEvents();
+                }
+            }
+            else
+                m_wlbg->paint(m_canvas, stipples, i);
         }
 
 
@@ -117,7 +137,10 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
         qreal radius = stipple.size / 2.0; // Assuming size is the diameter
 
         // Set brush and pen for this stipple
-        painter.setBrush(QBrush(stipple.color));
+        if (iteration == settings.max_iteration - 1)
+            painter.setBrush(QBrush(Qt::black));
+        else
+            painter.setBrush(QBrush(stipple.color));
 
         // Draw the stipple
         painter.drawEllipse(center, radius, radius);

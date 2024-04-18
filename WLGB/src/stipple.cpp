@@ -20,7 +20,7 @@ std::vector<Stipple> WLBG::init_stipples()
     std::vector<Stipple> stipples(init_num);
     std::generate(stipples.begin(), stipples.end(), [&]() {
         return Stipple{Vector2f(dis(gen), dis(gen)), init_size,
-                       Qt::black};
+                       Qt::black, false, Vector2f(dis(gen), dis(gen)), 0.0f};
     });
     return stipples;
 }

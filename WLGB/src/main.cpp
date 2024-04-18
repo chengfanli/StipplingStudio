@@ -55,8 +55,9 @@ int main(int argc, char *argv[])
     settings.hysteresis = input.value("WLBG/hysteresis").toFloat();
     settings.hysteresis_delta = input.value("WLBG/hysteresis_delta").toFloat();
     settings.adaptive_stipple_size = input.value("WLBG/adaptive_stipple_size").toBool();
-
-
+    // animation
+    settings.point_animation = input.value("ANIMATION/point_animation").toBool();
+    settings.animation_frame  = input.value("ANIMATION/animation_frame").toInt();
 
     // Create a GUI window
     MainWindow w;

@@ -1,4 +1,5 @@
 #include "wlbg.h"
+#include "settings.h"
 
 #include <iostream>
 #include <vector>
@@ -146,8 +147,21 @@ void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_siz
     splitSeed2[0] = (std::max(0.0f, std::min(splitSeed2.x(), 1.0f)));
     splitSeed2[1] = (std::max(0.0f, std::min(splitSeed2.y(), 1.0f)));
 
-    stipples.push_back({jitter(splitSeed1), point_size, Qt::red});
-    stipples.push_back({jitter(splitSeed2), point_size, Qt::red});
+    std::cout << splitSeed2.norm() << std::endl;
+
+    auto final_1 = jitter(splitSeed1);
+    auto final_2 = jitter(splitSeed2);
+
+    if (settings.point_animation)
+    {
+        stipples.push_back({cell.centroid, point_size, Qt::red, true, final_1, (final_1 - cell.centroid).norm() / (float)settings.animation_frame});
+        stipples.push_back({cell.centroid, point_size, Qt::red, true, final_2, (final_2 - cell.centroid).norm() / (float)settings.animation_frame});
+    }
+    else
+    {
+        stipples.push_back({jitter(splitSeed1), point_size, Qt::red, false, jitter(splitSeed1), 0.0f});
+        stipples.push_back({jitter(splitSeed2), point_size, Qt::red, false, jitter(splitSeed2), 0.0f});
+    }
 }
 
 std::vector<Cell> WLBG::accumulateCells(const IndexMap& map)
