@@ -1,0 +1,9 @@
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/MLBG.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/StaticGLEW.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/MLBG_other_files.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/MLBG_autogen_timestamp_deps.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/MLBG_autogen.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/StaticGLEW_autogen_timestamp_deps.dir
+E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Debug/CMakeFiles/StaticGLEW_autogen.dir

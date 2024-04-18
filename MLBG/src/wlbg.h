@@ -43,7 +43,9 @@ struct Stipple
     Eigen::Vector2f pos;
     float size;
     QColor color;
+    bool inverse;
     int layerId;
+    int id;
     bool isShown;
 };
 
@@ -53,6 +55,7 @@ struct Cell
     float orientation;
     float area;
     float total_density;
+    float average_density;
 };
 
 class IndexMap;
@@ -70,13 +73,15 @@ public:
     void paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration);
 
     // stipples
-    std::pair<std::vector<Stipple>, std::vector<Stipple> > init_stipples();
+    // std::pair<std::vector<Stipple>, std::vector<Stipple> > init_stipples();
+    std::vector<Stipple> init_stipples(QColor color, bool inverse);
     float current_stipple_size(Cell cell);
 
     // voronoi
-    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d);
-    void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size);
-    std::vector<Cell> accumulateCells(const IndexMap& map);
+    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, std::vector<Stipple> &newPoints, draw &d, bool inverse);
+    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d, bool inverse);
+    void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, QColor color, bool inverse);
+    std::vector<Cell> accumulateCells(const IndexMap& map, bool inverse);
 
     // utils
     int find_nearest_point(const std::vector<Stipple>& points, float pos_x, float pos_y);
@@ -88,6 +93,9 @@ public:
     int min3(int a, int b, int c);
     int max3(int a, int b, int c);
     bool isInsideTriangle(jcv_point a, jcv_point b, jcv_point c, jcv_point p);
+
+    //JCV
+    jcv_point* construct_jcv(const std::vector<Stipple> &points, const jcv_point* min, const jcv_point* max, const jcv_point* scale);
 };
 
 // Index Map

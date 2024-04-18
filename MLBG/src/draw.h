@@ -20,6 +20,7 @@ public:
 private:
     QImage image;
     QPainter painter;
+    bool exist;
 };
 
 #endif // DRAW_H

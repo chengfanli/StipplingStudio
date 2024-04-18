@@ -1,0 +1,114 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MLBG",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "MLBG::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MLBG-Release-6ab23dd82c240ceb51e8.json",
+					"name" : "MLBG",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MLBG_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MLBG_autogen-Release-c97a4ea3e3b1b01283d8.json",
+					"name" : "MLBG_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MLBG_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MLBG_autogen_timestamp_deps-Release-a7d821c1f10d91256065.json",
+					"name" : "MLBG_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MLBG_other_files::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MLBG_other_files-Release-ed01e6c0ba4d8db9948e.json",
+					"name" : "MLBG_other_files",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "StaticGLEW::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-StaticGLEW-Release-19f79ac6d79ac1f81b11.json",
+					"name" : "StaticGLEW",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "StaticGLEW_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-StaticGLEW_autogen-Release-84199a3620fe1c443c40.json",
+					"name" : "StaticGLEW_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "StaticGLEW_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-StaticGLEW_autogen_timestamp_deps-Release-efdac1f8ac904d96bec6.json",
+					"name" : "StaticGLEW_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/Qtprograms/StipplingStudio/MLBG/build/build-MLBG-Desktop_Qt_6_5_2_MinGW_64_bit-Release",
+		"source" : "E:/Qtprograms/StipplingStudio/MLBG"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
