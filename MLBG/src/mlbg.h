@@ -2,6 +2,7 @@
 #define MLBG_H
 
 #include "src/wlbg.h"
+#include <unordered_map>
 
 class MLBG: public WLBG
 {
@@ -18,6 +19,7 @@ public:
     }
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, Stipple stipple);
 
+    std::vector<Stipple> filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg);
 
 };
 

@@ -125,15 +125,45 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 //    w.resize(1200, 1200);
 
     m_canvas->displayImage(image); // Update the canvas display
-//    emit m_canvas->imageUpdated(m_canvas, image);
-
-    // Now schedule the displayImage call on the main thread
-//    QMetaObject::invokeMethod(m_canvas, "displayImage", Qt::QueuedConnection,
-//                              Q_ARG(QImage, image));
-
 
     // Save the image
     image.save(filePath);
+}
+
+QImage WLBG::paintBG(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
+{
+    std::cout << "Start Painting" << std::endl;
+    //    QSize imageSize(1200, 1000); // Set your desired image size
+    QString filePath = settings.output_path; // Set your desired file path
+
+    QImage image(m_size,  QImage::Format_RGBX8888);
+    image.fill(Qt::black); // Fill the background
+
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing); // Optional: for smoother edges
+    painter.setPen(Qt::NoPen); // No border
+
+    // Draw each stipple
+    // #pragma omp parallel for
+    for (const auto& stipple : points)
+    {
+        QPointF center(stipple.pos.x() * m_size.width(), stipple.pos.y() * m_size.height());
+        qreal radius = stipple.size / 2.0; // Assuming size is the diameter
+
+        // Set brush and pen for this stipple
+        painter.setBrush(QBrush(stipple.color));
+
+        // Draw the stipple
+        painter.drawEllipse(center, radius, radius);
+    }
+
+    //    w.resize(1200, 1200);
+
+    m_canvas->displayImage(image); // Update the canvas display
+
+    // Save the image
+//    image.save(filePath);
+    return image;
 }
 
 // Index Map

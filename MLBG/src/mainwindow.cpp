@@ -65,6 +65,7 @@ MainWindow::MainWindow()
     addPushButton(layout, "Draw Voronoi Diagram", &MainWindow::onDrawVoronoiButtonClick);
     addPushButton(layout, "Multiple Stippling", &MainWindow::onMLBGButtonClick);
 //    addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
+    addPushButton(layout, "Fill Background", &MainWindow::onFillButtonClick);
 }
 
 
@@ -174,6 +175,13 @@ void  MainWindow::onMLBGButtonClick() {
     std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
 
 }
+
+void MainWindow::onFillButtonClick() {
+    MLBG m_mlbg = MLBG();
+    std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
+    std::vector<Stipple> newstipples = m_mlbg.filling(stipples, m_canvas, &m_mlbg);
+}
+
 void MainWindow::onSaveButtonClick() {
     // Get new image path selected by user
     QString file = QFileDialog::getSaveFileName(this, tr("Save Image"), QDir::currentPath(), tr("Image Files (*.png *.jpg *.jpeg)"));

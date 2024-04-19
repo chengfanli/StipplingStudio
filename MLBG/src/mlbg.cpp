@@ -151,6 +151,78 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
     return total_stipples;
 }
 
+std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg)
+{
+    std::cout << "================= Begin filling ==================" << std::endl;
+
+    for (int i = 0; i < foregroundStipples.size(); i++) {
+        foregroundStipples[i].color = Qt::white;
+    }
+
+    QImage newImage = m_mlbg->paintBG(m_canvas, foregroundStipples, 0);
+
+    // stippling iteration
+    int num_split = 0;
+    int num_merge = 0;
+//    for (int i = 0; i < settings.max_iteration; i++)
+//    {
+//        draw d;
+//        std::cout << "Iteration: " << i << std::endl;
+
+//        // cells
+//        std::vector<Cell> voronoi_cells = generate_voronoi_cells(foregroundStipples, d, false);
+//        std::cout << "Current number of points: " << foregroundStipples.size() << std::endl;
+
+//        // current hysteresis
+//        float hysteresis = settings.hysteresis + i * settings.hysteresis_delta;
+
+//        foregroundStipples.clear();
+//        for (const auto &cell : voronoi_cells)
+//        {
+//            float point_size = 1.0f;
+
+//            if (cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
+//                num_merge++;
+//                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+//                d.drawX(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::red);
+//            }
+//            else if (cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
+//                stipples.push_back({cell.centroid, point_size, Qt::black});
+//                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+//            }
+//            else // split
+//            {
+//                num_split++;
+//                split_cell(foregroundStipples, cell, point_size, Qt::red, false);
+//                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+//                auto last = stipples.back();
+//                auto secondLast = stipples[stipples.size() - 2];
+//                d.drawPoints(last.pos.x() * m_size.width(), last.pos.y() * m_size.height(), Qt::green);
+//                d.drawPoints(secondLast.pos.x() * m_size.width(), secondLast.pos.y() * m_size.height(), Qt::green);
+//            }
+//        }
+
+//        if (num_split == 0 && num_merge == 0)
+//            break;
+//        num_split = 0;
+//        num_merge = 0;
+
+//        if (isVoronoi == true) {
+//            d.endPaint(i, m_canvas);
+//        }
+//        else
+//        {
+//            m_wlbg->paint(m_canvas, stipples, i);
+//        }
+
+
+//        // Handle other events, allowing GUI updates
+//        QCoreApplication::processEvents();
+//    }
+
+    return foregroundStipples;
+}
+
 
 std::vector<Cell> MLBG::generate_voronoi_cells(std::vector<Stipple> points, std::vector<int> &indices, draw &d, bool inverse)
 {
