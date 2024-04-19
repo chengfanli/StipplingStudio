@@ -29,7 +29,9 @@ float WLBG::current_stipple_size(Cell cell)
 {
     if (settings.adaptive_stipple_size)
     {
-        // TODO
+        auto size = settings.init_stipple_size;
+        return std::clamp(size - 2.0f, 0.1f, size) * (1.0f - std::sqrt(cell.total_density / cell.area)) +
+               (size + 2.0f) * std::sqrt(cell.total_density / cell.area);
     }
     else
         return settings.init_stipple_size;
