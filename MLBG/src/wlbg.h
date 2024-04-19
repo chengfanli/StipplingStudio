@@ -44,8 +44,8 @@ struct Stipple
     float size;
     QColor color;
     bool inverse;
+    float average_density;
     int layerId;
-    int id;
     bool isShown;
 };
 
@@ -78,7 +78,7 @@ public:
     float current_stipple_size(Cell cell);
 
     // voronoi
-    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, std::vector<Stipple> &newPoints, draw &d, bool inverse);
+    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, std::vector<int> &indices, draw &d, bool inverse);
     std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d, bool inverse);
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, QColor color, bool inverse);
     std::vector<Cell> accumulateCells(const IndexMap& map, bool inverse);
