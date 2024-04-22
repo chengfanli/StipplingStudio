@@ -17,7 +17,12 @@ public:
     std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d, bool inverse){
         return WLBG::generate_voronoi_cells(points, d, inverse);
     }
+    std::vector<Cell> generate_voronoi_cells_withDiffBGImage(std::vector<Stipple> points, draw &d, QImage newDensity);
+    std::vector<Cell> accumulateCells_withDiffImage(const IndexMap& map, QImage density);
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, Stipple stipple);
+    void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, QColor color, bool inverse) {
+        return WLBG::split_cell(stipples, cell,  point_size,  color,  inverse);
+    }
 
     std::vector<Stipple> filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg);
 
