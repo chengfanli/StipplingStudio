@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "settings.h"
 #include "wlbg.h"
+#include "mlbg.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -62,7 +63,9 @@ MainWindow::MainWindow()
     addPushButton(layout, "Load Image", &MainWindow::onUploadButtonClick);
     addPushButton(layout, "Stippling", &MainWindow::onStippleButtonClick);
     addPushButton(layout, "Draw Voronoi Diagram", &MainWindow::onDrawVoronoiButtonClick);
+    addPushButton(layout, "Multiple Stippling", &MainWindow::onMLBGButtonClick);
 //    addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
+    addPushButton(layout, "Fill Background", &MainWindow::onFillButtonClick);
 }
 
 
@@ -166,6 +169,17 @@ void MainWindow::onUploadButtonClick() {
     m_canvas->loadImageFromFile(settings.image_path);
 
     m_canvas->settingsChanged();
+}
+void  MainWindow::onMLBGButtonClick() {
+    MLBG m_mlbg = MLBG();
+    std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
+
+}
+
+void MainWindow::onFillButtonClick() {
+    MLBG m_mlbg = MLBG();
+    std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
+    std::vector<Stipple> newstipples = m_mlbg.filling(stipples, m_canvas, &m_mlbg);
 }
 
 void MainWindow::onSaveButtonClick() {

@@ -24,7 +24,7 @@
 
 using namespace Eigen;
 
-jcv_point* construct_jcv(const std::vector<Stipple> &points, const jcv_point* min, const jcv_point* max, const jcv_point* scale) {
+jcv_point* WLBG::construct_jcv(const std::vector<Stipple> &points, const jcv_point* min, const jcv_point* max, const jcv_point* scale) {
     if (points.empty()) return nullptr; // Safety check
 
     // Allocate memory for jcv_point array
@@ -44,7 +44,8 @@ jcv_point* construct_jcv(const std::vector<Stipple> &points, const jcv_point* mi
     return jcv_points;
 }
 
-std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw &d)
+
+std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw &d, bool inverse)
 {
     jcv_diagram diagram;
     auto count = points.size();
@@ -55,7 +56,6 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
     dimensions.x = (jcv_real)m_density.width();
     dimensions.y = (jcv_real)m_density.height();
 
-    // whats the number of x and y?
     d.init(dimensions.x, dimensions.y);
 
     jcv_point m;
@@ -74,6 +74,7 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
     IndexMap idxMap(m_density.width(), m_density.height(), points.size());
 
     std::cout << "Painting Voronoi Diagram" << std::endl;
+
     for( int i = 0; i < diagram.numsites; ++i )
     {
         const jcv_site* site = &sites[i];
@@ -103,7 +104,7 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
             {
                 for (int x = minX; x <= maxX; x++)
                 {
-//                    p = jcv_point(x, y);
+                    //                    p = jcv_point(x, y);
                     p.x = x;
                     p.y = y;
 
@@ -118,11 +119,11 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
     jcv_diagram_free( &diagram );
 
     std::cout << "Calculating Voronoi Cell" << std::endl;
-    auto res = accumulateCells(idxMap);
+    auto res = accumulateCells(idxMap, inverse);
     return res;
 }
 
-void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size)
+void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, QColor color, bool inverse)
 {
     const float area = std::max(1.0f, cell.area);
     const float circleRadius = std::sqrt(area / M_PI);
@@ -146,11 +147,11 @@ void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_siz
     splitSeed2[0] = (std::max(0.0f, std::min(splitSeed2.x(), 1.0f)));
     splitSeed2[1] = (std::max(0.0f, std::min(splitSeed2.y(), 1.0f)));
 
-    stipples.push_back({jitter(splitSeed1), point_size, Qt::red});
-    stipples.push_back({jitter(splitSeed2), point_size, Qt::red});
+    stipples.push_back({jitter(splitSeed1), point_size, color, inverse});
+    stipples.push_back({jitter(splitSeed2), point_size, color, inverse});
 }
 
-std::vector<Cell> WLBG::accumulateCells(const IndexMap& map)
+std::vector<Cell> WLBG::accumulateCells(const IndexMap& map, bool inverse)
 {
     // compute voronoi cell moments
     std::vector<Cell> cells = std::vector<Cell>(map.count());
@@ -162,9 +163,11 @@ std::vector<Cell> WLBG::accumulateCells(const IndexMap& map)
             uint32_t index = map.get(x, y);
 
             QRgb densityPixel = m_density.pixel(x, y);
-            float density = std::max(1.0f - qGray(densityPixel) / 255.0f,
+            float density = std::max(1.0f - qGray(densityPixel) / 255.0f * qAlpha(densityPixel) / 255.0f,
                                      std::numeric_limits<float>::epsilon());
-
+            if(inverse) {
+                density = 1.f - density;
+            }
             #pragma omp critical
             {
                 Cell& cell = cells[index];
@@ -190,6 +193,9 @@ std::vector<Cell> WLBG::accumulateCells(const IndexMap& map)
 
         auto [m00, m10, m01, m11, m20, m02] = moments[i];
 
+        //density
+        cell.average_density = cell.total_density / cell.area;
+        std::clamp(cell.average_density, 0.f, 1.f);
         // centroid
         cell.centroid[0] = (m10 / m00);
         cell.centroid[1] = (m01 / m00);
