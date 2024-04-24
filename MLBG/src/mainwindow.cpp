@@ -180,6 +180,7 @@ void MainWindow::onFillButtonClick() {
     MLBG m_mlbg = MLBG();
     std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
     std::vector<Stipple> newstipples = m_mlbg.filling(stipples, m_canvas, &m_mlbg);
+    m_mlbg = MLBG();
 }
 
 void MainWindow::onSaveButtonClick() {

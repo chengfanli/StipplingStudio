@@ -163,11 +163,14 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
     for (int i = 0; i < foregroundStipples.size(); i++) {
         tempStipples.push_back(foregroundStipples[i]);
         tempStipples[i].color = Qt::white;
-        backgroundStipples.push_back(tempStipples[i]);
-        backgroundStipples[i].size =  20.0f;
+        // backgroundStipples.push_back(tempStipples[i]);
+        // backgroundStipples[i].size =  20.0f;
     }
 
+    backgroundStipples.push_back(tempStipples[0]);
+
     QImage newImage = m_mlbg->paintBG(m_canvas, tempStipples, 0);
+    tempStipples.clear();
     QImage newDensity = newImage.scaledToWidth(
                                       settings.supersampling_factor * newImage.width(),
                                       Qt::SmoothTransformation
@@ -191,7 +194,7 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
 //    std::this_thread::sleep_for(std::chrono::seconds(3));
 
 
-    for (int i = 0; i < settings.max_iteration; i++)
+    for (int i = 0; i < 18; i++)
     {
         draw d;
         std::cout << "Iteration: " << i << std::endl;
@@ -210,7 +213,7 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
         for (unsigned long long cellId = 0; cellId < voronoi_cells.size(); cellId++)
         {
             const auto &cell = voronoi_cells[cellId];
-            float point_size = current_stipple_size(cell);
+            float point_size = 4.0f;//current_stipple_size(cell);
 
             QColor stippleColor;
             if (cells_originImage[cellId].average_density >= cells_originImage[cellId].average_density_inv) {
@@ -219,19 +222,19 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
                 stippleColor = Qt::white;
             }
 
-            if (cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
+            if (false){//cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
                 num_merge++;
                 d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), stippleColor);
                 d.drawX(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::red);
             }
-            else if (cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
-                backgroundStipples.push_back({cell.centroid, 20.0f, stippleColor});
+            else if (false){//(cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
+                backgroundStipples.push_back({cell.centroid, point_size, stippleColor});
                 d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), stippleColor);
             }
             else // split
             {
                 num_split++;
-                split_cell(backgroundStipples, cell, 20.0f, stippleColor, false);
+                split_cell(backgroundStipples, cell, point_size, stippleColor, false);
                 d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), stippleColor);
                 auto last = backgroundStipples.back();
                 auto secondLast = backgroundStipples[backgroundStipples.size() - 2];
@@ -266,18 +269,25 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
     return foregroundStipples;
 }
 
-std::vector<Cell> MLBG::generate_voronoi_cells_withDiffBGImage(std::vector<Stipple> points, draw &d, QImage newDensity) {
-
+std::vector<Cell> MLBG::generate_voronoi_cells_withDiffBGImage(std::vector<Stipple> points, draw &d, QImage newDensity)
+{
+    std::cout << 271 << std::endl;
     jcv_diagram diagram;
     auto count = points.size();
     jcv_clipper* clipper = 0;
     jcv_rect rect;
 
+    std::cout << 277 << std::endl;
+
     jcv_point dimensions;
     dimensions.x = (jcv_real)newDensity.width();
     dimensions.y = (jcv_real)newDensity.height();
 
+    std::cout << 283 << std::endl;
+
     d.init(dimensions.x, dimensions.y);
+
+    std::cout << 287 << std::endl;
 
     jcv_point m;
     m.x = 0.0;
@@ -285,9 +295,14 @@ std::vector<Cell> MLBG::generate_voronoi_cells_withDiffBGImage(std::vector<Stipp
     rect.min = m;
     rect.max = dimensions;
 
+    std::cout << 295 << std::endl;
+
     memset(&diagram, 0, sizeof(jcv_diagram));
+    std::cout << 298 << std::endl;
     jcv_point* temp = construct_jcv(points, &diagram.min, &dimensions, &dimensions);
+    std::cout << 300 << std::endl;
     jcv_diagram_generate(count, temp, &rect, clipper, &diagram);
+    std::cout << 302 << std::endl;
 
     std::cout << "Generating Voronoi Diagram" << std::endl;
     const jcv_site* sites = jcv_diagram_get_sites( &diagram );
