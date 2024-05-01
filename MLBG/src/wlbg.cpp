@@ -95,7 +95,7 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoro
     return stipples;
 }
 
-void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
+QImage WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 {
     std::cout << "Start Painting" << std::endl;
 //    QSize imageSize(1200, 1000); // Set your desired image size
@@ -103,6 +103,7 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
     QImage image(m_size,  QImage::Format_RGBX8888);
     image.fill(QColor(255, 192, 203)); // Fill the background with white
+    // image.fill(Qt::black);
 
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing); // Optional: for smoother edges
@@ -128,6 +129,7 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
     // Save the image
     image.save(filePath);
+    return image;
 }
 
 QImage WLBG::paintBG(Canvas *m_canvas, std::vector<Stipple> points, int iteration)

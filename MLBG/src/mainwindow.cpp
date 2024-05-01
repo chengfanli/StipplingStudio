@@ -12,6 +12,7 @@
 #include <QScrollArea>
 #include <QCheckBox>
 #include <iostream>
+#include <QCoreApplication>
 
 MainWindow::MainWindow()
 {
@@ -180,6 +181,12 @@ void MainWindow::onFillButtonClick() {
     MLBG m_mlbg = MLBG();
     std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
     std::vector<Stipple> newstipples = m_mlbg.filling(stipples, m_canvas, &m_mlbg);
+
+    m_mlbg.filling_animation(stipples, newstipples, m_canvas, &m_mlbg);
+
+    m_mlbg.paint(m_canvas, newstipples, 20);
+    QCoreApplication::processEvents();
+
     m_mlbg = MLBG();
 }
 

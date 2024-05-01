@@ -146,9 +146,10 @@ void MainWindow::onStippleButtonClick() {
     WLBG m_wlbg = WLBG();
     std::vector<Stipple> stipples = m_wlbg.stippling(m_canvas, &m_wlbg, false);
 
-    std::cout << "finish" << std::endl;
-//    m_wlbg.paint(m_canvas, stipples, 5);
+    // m_wlbg.stippling_video(m_canvas, &m_wlbg, false);
 
+    std::cout << "finish" << std::endl;
+    m_wlbg.paint(m_canvas, stipples, 5);
 }
 
 void MainWindow::onDrawVoronoiButtonClick() {

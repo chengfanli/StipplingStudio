@@ -71,6 +71,7 @@ add_executable(${PROJECT_NAME}
     src/canvas.h
     src/rgba.h
     src/draw.h src/draw.cpp
+    src/video.cpp
 )
 
 # GLEW: this creates its library and allows you to `#include "GL/glew.h"`

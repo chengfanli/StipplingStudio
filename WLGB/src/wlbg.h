@@ -70,6 +70,8 @@ public:
 public:
     WLBG();
     std::vector<Stipple> stippling(Canvas *m_canvas, WLBG *wlbg, bool isVoronoi);
+    void stippling_video(Canvas *m_canvas, WLBG *m_wlbg, bool isVoronoi);
+    QImage process(QImage input, Canvas *m_canvas, WLBG *m_wlbg, bool isVoronoi);
     void paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration);
 
     // stipples

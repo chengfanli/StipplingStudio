@@ -140,7 +140,7 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
         if (iteration == settings.max_iteration - 1)
             painter.setBrush(QBrush(Qt::black));
         else
-            painter.setBrush(QBrush(stipple.color));
+            painter.setBrush(QBrush(Qt::black));//stipple.color));
 
         // Draw the stipple
         painter.drawEllipse(center, radius, radius);

@@ -25,6 +25,7 @@ public:
     }
 
     std::vector<Stipple> filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg);
+    void filling_animation(std::vector<Stipple> stipples, std::vector<Stipple> newstipples, Canvas *m_canvas, MLBG *m_mlbg);
 
 };
 

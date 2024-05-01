@@ -153,19 +153,159 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
     return total_stipples;
 }
 
+struct Filling_line
+{
+    Eigen::Vector2i line_start;
+    Eigen::Vector2i line_end;
+    int kernel_size;
+    int num_step_per_frame;
+};
+
+std::vector<Eigen::Vector2i> generateLinePoints(int x1, int y1, int x2, int y2)
+{
+    std::vector<Eigen::Vector2i> points;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int sx = (dx > 0) ? 1 : -1;
+    int sy = (dy > 0) ? 1 : -1;
+    dx = std::abs(dx);
+    dy = std::abs(dy);
+
+    int err = (dx > dy ? dx : -dy) / 2;
+    int e2;
+
+    while (true) {
+        points.push_back({x1, y1});
+        if (x1 == x2 && y1 == y2) break;
+        e2 = err;
+        if (e2 > -dx) { err -= dy; x1 += sx; }
+        if (e2 < dy) { err += dx; y1 += sy; }
+    }
+
+    return points;
+}
+
+std::vector<Filling_line> create_diagonal_filling_lines(int width, int height, int kernel_size) {
+    std::vector<Filling_line> lines;
+
+    // Define the maximum extent of the diagonal based on image dimensions
+    int max_diagonal = width + height;
+
+    bool temp = false;
+    // Loop through each possible line start along the diagonal
+    for (int start = 0; start < max_diagonal; start += kernel_size) {
+        int x_start = std::max(0, start - height);
+        int y_start = std::max(0, height - start);
+
+        int x_end = std::min(width, start);
+        int y_end = std::max(0, start - width);
+
+        if (y_end < height && x_start < width) {
+            if (temp)
+            {
+                Filling_line line;
+                line.line_start = Eigen::Vector2i(x_start, y_start);
+                line.line_end = Eigen::Vector2i(x_end, y_end);
+                line.kernel_size = kernel_size;
+                line.num_step_per_frame = 1;
+                lines.push_back(line);
+            }
+            else
+            {
+                Filling_line line;
+                line.line_end = Eigen::Vector2i(x_start, y_start);
+                line.line_start = Eigen::Vector2i(x_end, y_end);
+                line.kernel_size = kernel_size;
+                line.num_step_per_frame = 1;
+                lines.push_back(line);
+            }
+            temp = !temp;
+        }
+
+    }
+
+    return lines;
+}
+
+std::vector<Eigen::Vector2i> generateLinePoints(Eigen::Vector2i line_start, Eigen::Vector2i line_end)
+{
+    return generateLinePoints(line_start[0], line_start[1], line_end[0], line_end[1]);
+}
+
+void MLBG::filling_animation(std::vector<Stipple> points, std::vector<Stipple> filling_points, Canvas *m_canvas, MLBG *m_mlbg)
+{
+    // prepare two images
+    // QImage image_old = m_mlbg->paintBG(m_canvas, points, 0);
+    QImage image_new = m_mlbg->paint(m_canvas, filling_points, 0);
+    QImage image_final = m_mlbg->paint(m_canvas, points, 0);
+
+    // for monroe1.jpg 544 x 768
+    int width = 544;
+    int height = 768;
+
+    // define the filling curve
+    std::vector<Filling_line> lines;
+    int kernel_size = 80;
+    int num_step_per_frame = 1;
+    lines.push_back({{0,0}, {0,760}, kernel_size, num_step_per_frame});
+    lines.push_back({{0,680}, {80,0}, kernel_size, num_step_per_frame});
+    lines.push_back({{80,0}, {160,0}, kernel_size, num_step_per_frame});
+
+    lines.push_back({{160,0}, {0,600}, kernel_size, num_step_per_frame});
+    lines.push_back({{0,520}, {240,0}, kernel_size, num_step_per_frame});
+    lines.push_back({{240,0}, {320,0}, kernel_size, num_step_per_frame});
+
+    lines.push_back({{360,40}, {40,480}, kernel_size, num_step_per_frame});
+    lines.push_back({{0,320}, {360, 0}, kernel_size, num_step_per_frame});
+    // lines.push_back({{360,0}, {480,0}, kernel_size, num_step_per_frame});
+
+    // lines.push_back({{480,0}, {0,280}, kernel_size, num_step_per_frame});
+    // lines.push_back({{140, 200}, {540,0}, kernel_size, num_step_per_frame});
+
+    lines.push_back({{0, 760}, {500,0}, kernel_size, num_step_per_frame});
+
+    // auto lines = create_diagonal_filling_lines(width, height, kernel_size);
+
+    // start painting
+    for (auto& line : lines)
+    {
+        std::vector<Eigen::Vector2i> line_points = generateLinePoints(line.line_start, line.line_end);
+        for (auto& p : line_points)
+        {
+            for (int x = p[0] - line.kernel_size; x < p[0] + line.kernel_size; x++)
+            {
+                for (int y = p[1] - line.kernel_size; y < p[1] + line.kernel_size; y++)
+                {
+                    if (x >= 0 && y >= 0 && x < width && y < height)
+                    {
+                        image_final.setPixel(x, y, image_new.pixel(x, y));
+                    }
+                    if (width - x >= 0 && height - y >= 0 && width - x < width && height - y < height)
+                    {
+                        image_final.setPixel(width - x, height - y, image_new.pixel(width - x, height - y));
+                    }
+
+                }
+            }
+            m_canvas->displayImage(image_final);
+            QCoreApplication::processEvents();
+        }
+    }
+}
+
 std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg)
 {
     std::cout << "================= Begin filling ==================" << std::endl;
 
-    std::vector<Stipple> tempStipples;
+    std::vector<Stipple> tempStipples = foregroundStipples;
     std::vector<Stipple> backgroundStipples;
 
-    for (int i = 0; i < foregroundStipples.size(); i++) {
-        tempStipples.push_back(foregroundStipples[i]);
-        tempStipples[i].color = Qt::white;
-        // backgroundStipples.push_back(tempStipples[i]);
-        // backgroundStipples[i].size =  20.0f;
-    }
+    // for (int i = 0; i < foregroundStipples.size(); i++) {
+    //     tempStipples.push_back(foregroundStipples[i]);
+    //     tempStipples[i].color = Qt::white;
+    //     // backgroundStipples.push_back(tempStipples[i]);
+    //     // backgroundStipples[i].size =  20.0f;
+    // }
 
     backgroundStipples.push_back(tempStipples[0]);
 
@@ -250,10 +390,10 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
         num_split = 0;
         num_merge = 0;
 
-        m_mlbg->paint(m_canvas, backgroundStipples, 20);
+        // m_mlbg->paint(m_canvas, backgroundStipples, 20);
 
         // Handle other events, allowing GUI updates
-        QCoreApplication::processEvents();
+        // QCoreApplication::processEvents();
 
     }
 
@@ -261,12 +401,12 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
         backgroundStipples.push_back(foregroundStipples[i]);
     }
 
-    m_mlbg->paint(m_canvas, backgroundStipples, 20);
+    // m_mlbg->paint(m_canvas, backgroundStipples, 20);
 
-    // Handle other events, allowing GUI updates
-    QCoreApplication::processEvents();
+    // // Handle other events, allowing GUI updates
+    // QCoreApplication::processEvents();
 
-    return foregroundStipples;
+    return backgroundStipples;
 }
 
 std::vector<Cell> MLBG::generate_voronoi_cells_withDiffBGImage(std::vector<Stipple> points, draw &d, QImage newDensity)
@@ -542,3 +682,5 @@ void MLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_siz
     stipples.push_back({jitter(splitSeed1), point_size, stipple.color, stipple.inverse, stipple.average_density, stipple.layerId});
     stipples.push_back({jitter(splitSeed2), point_size, stipple.color, stipple.inverse, stipple.average_density, stipple.layerId});
 }
+
+
