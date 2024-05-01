@@ -72,6 +72,7 @@ add_executable(${PROJECT_NAME}
     src/rgba.h
     src/draw.h src/draw.cpp
     src/mlbg.h src/mlbg.cpp
+    src/color.cpp
 )
 
 # GLEW: this creates its library and allows you to `#include "GL/glew.h"`

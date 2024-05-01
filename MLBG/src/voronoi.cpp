@@ -211,3 +211,5 @@ std::vector<Cell> WLBG::accumulateCells(const IndexMap& map, bool inverse)
     }
     return cells;
 }
+
+

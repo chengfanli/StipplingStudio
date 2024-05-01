@@ -26,6 +26,20 @@ public:
 
     std::vector<Stipple> filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg);
 
+    //for color layers
+    std::vector<Stipple> stippling_color(Canvas *m_canvas, MLBG *m_mlbg, bool isVoronoi);
+    std::vector<Cell> generate_voronoi_cells_color(std::vector<Stipple> points, std::vector<int> &indices, int id);
+
+    std::vector<Cell> accumulateCells_color(const IndexMap& map, int id);
+    std::vector<Stipple> init_stipples_color(QColor color, int id);
+    void init_config();
+
+
+private:
+    int color_size;
+    std::vector<QImage> m_densities;
+    std::vector<QColor> colors;
+    std::map<std::pair<int, int>, float> sum_density_pixel;
 };
 
 #endif // MLBG_H

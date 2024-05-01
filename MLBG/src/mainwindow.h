@@ -31,6 +31,7 @@ private:
     void onUploadButtonClick();
     void onSaveButtonClick();
     void onMLBGButtonClick();
+    void onColorButtonClick();
     void setUIntVal(std::uint8_t &setValue, int newValue);
     void setIntVal(int &setValue, int newValue);
     void setFloatVal(float &setValue, float newValue);
