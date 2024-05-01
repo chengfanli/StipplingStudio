@@ -89,7 +89,7 @@ c=50
 palette2=np.ones((1*c, len(palette_rgb)*c, 3))
 for i in range(len(palette_rgb)):
     palette2[:,i*c:i*c+c,:]=palette_rgb[i,:].reshape((1,1,-1))
-Image.fromarray((palette2*255).round().astype(np.uint8)).save("out/color.png")
+Image.fromarray((palette2*255).round().astype(np.uint8)).save("../images/color_palette.png")
 
 print("Saving layers...")
 for i in range(0, mixing_weights.shape[-1]):

@@ -50,7 +50,12 @@ def main():
     threshold_num = int(config.get('COLOR', 'threshold'))
     x = int(config.get('COLOR', 'size'))
     
-    palette = extract_colors(image='../'+source_path, palette_size=10, resize=True)
+    palette = extract_colors(image='../'+source_path, palette_size=15, resize=True)
+    palette.display()
+    new_palette = ','.join(rgb_to_hex(color.rgb[0], color.rgb[1], color.rgb[2]) for color in palette)
+    print()
+    print()
+    
     '''
     random_colors = palette.random_color(N=8, mode='frequency')
     display(random_colors)
@@ -59,11 +64,11 @@ def main():
     display(filtered_random_colors)
     
     '''
-    filtered_colors = filter_similar_colors(palette, threshold=threshold_num)
-    # display(filtered_colors)
-    
-    filtered_colors = random_select(filtered_colors, x)
+    filtered_colors = filter_similar_colors(palette, threshold=30)
     display(filtered_colors)
+    
+    # filtered_colors = random_select(filtered_colors, x)
+    # display(filtered_colors)
     
     new_palette = ','.join(rgb_to_hex(color.rgb[0], color.rgb[1], color.rgb[2]) for color in filtered_colors)
     

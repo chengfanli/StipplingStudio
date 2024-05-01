@@ -26,6 +26,7 @@ struct Settings {
     //color
     QStringList palette;
     QString pre_image_path;
+    QString input_path;
 
     void loadSettingsOrDefaults();
     void saveSettings();

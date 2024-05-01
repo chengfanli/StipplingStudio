@@ -4,15 +4,17 @@
 #include <iostream>
 #include <random>
 #include <QCoreApplication>
+#include <QSettings>
 
 void MLBG::init_config() {
-    // std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
     // std::cout<<"Select Color Palette"<<std::endl;
     // system("cd Pylette && python run.py && cd ../");
 
-    // std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
     // std::cout<<"PreProcessing image"<<std::endl;
     // system("cd unmixer && python run.py && cd ../");
+
+    QSettings input(settings.input_path, QSettings::IniFormat);
+    settings.palette = input.value("COLOR/palette").toStringList();
 
     m_image = QImage(settings.pre_image_path);
     std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
