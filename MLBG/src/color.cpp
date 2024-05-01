@@ -6,6 +6,14 @@
 #include <QCoreApplication>
 
 void MLBG::init_config() {
+    // std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
+    // std::cout<<"Select Color Palette"<<std::endl;
+    // system("cd Pylette && python run.py && cd ../");
+
+    // std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
+    // std::cout<<"PreProcessing image"<<std::endl;
+    // system("cd unmixer && python run.py && cd ../");
+
     m_image = QImage(settings.pre_image_path);
     std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
     m_density = m_image.scaledToWidth(

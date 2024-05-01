@@ -12,7 +12,6 @@ from numpy import *
 import os
 import shutil
 import time
-import json
 import configparser
 
 # Modify image settings here.
