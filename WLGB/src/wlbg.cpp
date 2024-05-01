@@ -92,7 +92,14 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoro
                     {
                         if (s.moving)
                         {
+                            float oldRadius = std::sqrt(s.size / M_PI);
+                            float newRadius = std::sqrt(s.aim_size / M_PI);
+                            float radiusSpeed = (newRadius - oldRadius) / settings.animation_frame;
+
+                            std::cout << "R: " << oldRadius << " " << newRadius << " " << radiusSpeed << std::endl;
+
                             s.pos += (s.aim_pos - s.pos).normalized() * s.speed;
+                            s.size = (oldRadius + radiusSpeed * f) * M_PI;
                             if ((s.aim_pos - s.pos).norm() <= s.speed)
                             {
                                 s.moving = false;

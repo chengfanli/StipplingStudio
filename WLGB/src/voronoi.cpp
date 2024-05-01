@@ -134,6 +134,12 @@ void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_siz
         splitVector.x() * std::cos(a) - splitVector.y() * std::sin(a),
         splitVector.y() * std::cos(a) + splitVector.x() * std::sin(a));
 
+    float new_area = std::max(1.0f, splitVectorRotated[0] * splitVectorRotated[1] * 2);
+    float new_size = std::clamp(point_size - 2.0f, 0.1f, point_size) * (1.0f - std::sqrt(cell.total_density / new_area)) +
+                     (point_size + 2.0f) * std::sqrt(cell.total_density / new_area);
+    // cell.total_density is using the previous cell
+    new_size = (std::max(0.0f, std::min(new_size, 20.0f))) / 4;
+
     splitVectorRotated[0] = (splitVectorRotated[0] / m_density.width());
     splitVectorRotated[1] = (splitVectorRotated[1] / m_density.height());
 
@@ -154,13 +160,13 @@ void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_siz
 
     if (settings.point_animation)
     {
-        stipples.push_back({cell.centroid, point_size, Qt::red, true, final_1, (final_1 - cell.centroid).norm() / (float)settings.animation_frame});
-        stipples.push_back({cell.centroid, point_size, Qt::red, true, final_2, (final_2 - cell.centroid).norm() / (float)settings.animation_frame});
+        stipples.push_back({cell.centroid, point_size, Qt::red, true, final_1, (final_1 - cell.centroid).norm() / (float)settings.animation_frame, new_size});
+        stipples.push_back({cell.centroid, point_size, Qt::red, true, final_2, (final_2 - cell.centroid).norm() / (float)settings.animation_frame, new_size});
     }
     else
     {
-        stipples.push_back({jitter(splitSeed1), point_size, Qt::red, false, jitter(splitSeed1), 0.0f});
-        stipples.push_back({jitter(splitSeed2), point_size, Qt::red, false, jitter(splitSeed2), 0.0f});
+        stipples.push_back({jitter(splitSeed1), point_size, Qt::red, false, jitter(splitSeed1), 0.0f, point_size});
+        stipples.push_back({jitter(splitSeed2), point_size, Qt::red, false, jitter(splitSeed2), 0.0f, point_size});
     }
 }
 
