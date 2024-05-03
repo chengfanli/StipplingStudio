@@ -48,6 +48,8 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoro
         // current hysteresis
         float hysteresis = settings.hysteresis + i * settings.hysteresis_delta;
 
+        float old_size;
+
         stipples.clear();
         for (const auto &cell : voronoi_cells)
         {
@@ -71,6 +73,8 @@ std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoro
                 auto secondLast = stipples[stipples.size() - 2];
                 d.drawPoints(last.pos.x() * m_size.width(), last.pos.y() * m_size.height(), Qt::green);
                 d.drawPoints(secondLast.pos.x() * m_size.width(), secondLast.pos.y() * m_size.height(), Qt::green);
+
+
             }
         }
 
