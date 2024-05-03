@@ -17,6 +17,21 @@ MLBG::MLBG() {
                            settings.supersampling_factor * m_image.width(),
                            Qt::SmoothTransformation
                            ).convertToFormat(QImage::Format_Grayscale8);
+
+    // // Invert the grayscale image
+    // int width = m_density.width();
+    // int height = m_density.height();
+    // for (int y = 0; y < height; ++y) {
+    //     for (int x = 0; x < width; ++x) {
+    //         int pixelValue = QColor(m_density.pixel(x, y)).red();  // Red, green, and blue are equal in grayscale
+    //         int invertedValue = 255 - pixelValue;
+    //         m_density.setPixel(x, y, qRgb(invertedValue, invertedValue, invertedValue));
+    //     }
+    // }
+
+    // Save or display the inverted image
+    // m_density.save("inverted_grayscale_image.jpg");
+
     m_size = m_image.size();
 }
 

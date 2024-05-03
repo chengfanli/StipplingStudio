@@ -24,6 +24,18 @@ WLBG::WLBG()
             Qt::SmoothTransformation
         ).convertToFormat(QImage::Format_Grayscale8);
     m_size = m_image.size();
+
+    // // Invert the grayscale image
+    // int width = m_density.width();
+    // int height = m_density.height();
+    // for (int y = 0; y < height; ++y) {
+    //     for (int x = 0; x < width; ++x) {
+    //         int pixelValue = QColor(m_density.pixel(x, y)).red();  // Red, green, and blue are equal in grayscale
+    //         int invertedValue = 255 - pixelValue;
+    //         m_density.setPixel(x, y, qRgb(invertedValue, invertedValue, invertedValue));
+    //     }
+    // }
+    // m_density.save("./temp.png");
 }
 
 std::vector<Stipple> WLBG::stippling(Canvas *m_canvas, WLBG *m_wlbg, bool isVoronoi)
@@ -138,9 +150,9 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
         // Set brush and pen for this stipple
         if (iteration == settings.max_iteration - 1)
-            painter.setBrush(QBrush(Qt::black));
+            painter.setBrush(QBrush(QColor(0x5b, 0xc0, 0xeb)));
         else
-            painter.setBrush(QBrush(Qt::black));//stipple.color));
+            painter.setBrush(QBrush(QColor(0x5b, 0xc0, 0xeb)));//stipple.color));
 
         // Draw the stipple
         painter.drawEllipse(center, radius, radius);
