@@ -45,7 +45,7 @@ jcv_point* construct_jcv(const std::vector<Stipple> &points, const jcv_point* mi
     return jcv_points;
 }
 
-std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw &d)
+std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw &d, std::vector<CellEdge> &cellEdges, std::vector<int> &index)
 {
     jcv_diagram diagram;
     auto count = points.size();
@@ -74,19 +74,21 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
 
     IndexMap idxMap(m_density.width(), m_density.height(), points.size());
 
+    cellEdges.resize(points.size());
     std::cout << "Painting Voronoi Diagram" << std::endl;
     for( int i = 0; i < diagram.numsites; ++i )
     {
         const jcv_site* site = &sites[i];
         jcv_point s = site->p;
+        index.push_back(site->index);
 
         const jcv_graphedge* e = site->edges;
         while( e )
         {
             jcv_point p0 = e->pos[0];
             jcv_point p1 = e->pos[1];
-            d.drawEdge(p0, p1, QColor(255, 192, 203));
-
+            // d.drawEdge(p0, p1, QColor(255, 192, 203));
+            cellEdges[site->index].edges.push_back(std::make_pair(Eigen::Vector2f(p0.x, p0.y), Eigen::Vector2f(p1.x, p1.y)));
             // Compute triangle bounding box
             jcv_point* v0 = &s;
             jcv_point* v1 = &p0;
@@ -153,7 +155,7 @@ void WLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_siz
     splitSeed2[0] = (std::max(0.0f, std::min(splitSeed2.x(), 1.0f)));
     splitSeed2[1] = (std::max(0.0f, std::min(splitSeed2.y(), 1.0f)));
 
-    std::cout << splitSeed2.norm() << std::endl;
+    // std::cout << splitSeed2.norm() << std::endl;
 
     auto final_1 = jitter(splitSeed1);
     auto final_2 = jitter(splitSeed2);

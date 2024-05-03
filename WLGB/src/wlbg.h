@@ -38,6 +38,11 @@
 // #include <QOpenGLShaderProgram>
 // #include <QOpenGLVertexArrayObject>
 
+struct CellEdge
+{
+    std::vector<std::pair<Eigen::Vector2f, Eigen::Vector2f> > edges;
+};
+
 struct Stipple
 {
     Eigen::Vector2f pos;
@@ -49,6 +54,8 @@ struct Stipple
     Eigen::Vector2f aim_pos;
     float speed;
     float aim_size;
+    CellEdge edges;
+    bool is_delete;
 };
 
 struct Cell
@@ -58,6 +65,8 @@ struct Cell
     float area;
     float total_density;
 };
+
+
 
 class IndexMap;
 
@@ -78,7 +87,7 @@ public:
     float current_stipple_size(Cell cell);
 
     // voronoi
-    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d);
+    std::vector<Cell> generate_voronoi_cells(std::vector<Stipple> points, draw &d, std::vector<CellEdge> &cellEdges, std::vector<int> &index);
     void split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size);
     std::vector<Cell> accumulateCells(const IndexMap& map);
 
@@ -92,6 +101,9 @@ public:
     int min3(int a, int b, int c);
     int max3(int a, int b, int c);
     bool isInsideTriangle(jcv_point a, jcv_point b, jcv_point c, jcv_point p);
+
+    //ani
+    void paint_point_voronoi(Canvas *m_canvas, std::vector<Stipple> points, int iteration, std::vector<CellEdge> cellEdges);
 };
 
 // Index Map
