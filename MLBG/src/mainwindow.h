@@ -42,4 +42,5 @@ private:
     void onStippleButtonClick();
     void onDrawVoronoiButtonClick();
     void onFillButtonClick();
+    void onFillColorButtonClick();
 };

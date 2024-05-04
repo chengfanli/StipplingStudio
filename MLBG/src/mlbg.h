@@ -29,6 +29,7 @@ public:
     //for color layers
     std::vector<Stipple> stippling_color(Canvas *m_canvas, MLBG *m_mlbg, bool isVoronoi);
     std::vector<Cell> generate_voronoi_cells_color(std::vector<Stipple> points, std::vector<int> &indices, int id);
+    std::vector<Stipple> filling_color(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg);
 
     std::vector<Cell> accumulateCells_color(const IndexMap& map, int id);
     std::vector<Stipple> init_stipples_color(QColor color, int id);

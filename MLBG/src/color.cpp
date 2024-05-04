@@ -202,6 +202,142 @@ std::vector<Stipple> MLBG::stippling_color(Canvas *m_canvas, MLBG *m_mlbg, bool 
     return total_stipples;
 }
 
+std::vector<Stipple> MLBG::filling_color(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg)
+{
+    std::cout << "================= Begin filling ==================" << std::endl;
+
+    std::vector<Stipple> tempStipples;
+    std::vector<Stipple> backgroundStipples;
+
+    for (int i = 0; i < foregroundStipples.size(); i++) {
+        tempStipples.push_back(foregroundStipples[i]);
+        tempStipples[i].color = Qt::white;
+        // backgroundStipples.push_back(tempStipples[i]);
+        // backgroundStipples[i].size =  20.0f;
+    }
+
+    backgroundStipples.push_back(tempStipples[0]);
+
+//    QImage newImage = m_mlbg->paintBG(m_canvas, tempStipples, 0);
+//    tempStipples.clear();
+//    QImage newDensity = newImage.scaledToWidth(
+//                                    settings.supersampling_factor * newImage.width(),
+//                                    Qt::SmoothTransformation
+//                                    ).convertToFormat(QImage::Format_Grayscale8);
+
+//    QImage originImage = QImage(settings.image_path);
+//    QImage originDensity = originImage.scaledToWidth(
+//                                          settings.supersampling_factor * originImage.width(),
+//                                          Qt::SmoothTransformation
+//                                          ).convertToFormat(QImage::Format_Grayscale8);
+//    //    m_inv_density =
+
+
+
+    printf("here\n");
+
+    // stippling iteration
+    int num_split = 0;
+    int num_merge = 0;
+
+    //    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+
+    for (int i = 0; i < 18; i++)
+    {
+        draw d;
+        std::cout << "Iteration: " << i << std::endl;
+
+        // cells
+        std::vector<Cell> voronoi_cells = generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, m_density);
+//        std::vector<Cell> cells_originImage = generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, originDensity);
+        std::vector< std::vector <Cell> > cells;
+        for (int j = 0; j < m_densities.size(); j++)
+        {
+            cells.push_back(generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, m_densities[j]));
+        }
+
+        std::cout << "Current number of points: " << backgroundStipples.size() << std::endl;
+        //        std::vector<int> merge_indices_map
+
+        // current hysteresis
+        float hysteresis = settings.hysteresis + i * settings.hysteresis_delta;
+
+        backgroundStipples.clear();
+
+        for (unsigned long long cellId = 0; cellId < voronoi_cells.size(); cellId++)
+        {
+            const auto &cell = voronoi_cells[cellId];
+            float point_size = 4.0f;//current_stipple_size(cell);
+
+//            QColor stippleColor;
+//            if (cells_originImage[cellId].average_density >= cells_originImage[cellId].average_density_inv) {
+//                stippleColor = Qt::black;
+//            } else {
+//                stippleColor = Qt::white;
+//            }
+            // 创建一个pair数组，存储值和原始索引
+            std::vector<std::pair<float, int>> indexed_data;
+            for (int layer = 0; layer < cells.size(); layer++) {
+                indexed_data.push_back({cells[layer][cellId].average_density, layer});
+            }
+
+            // 对pair数组进行排序，基于第一个元素（实际的数据值）
+            std::sort(indexed_data.begin(), indexed_data.end());
+
+            // 排序后，最大值的pair在最后一个位置
+            auto& max_value_pair = indexed_data.back();
+//            std::cout << "最大值是: " << max_value_pair.first << std::endl;
+//                    std::cout << "最大值的原始ID (索引) 是: " << max_value_pair.second << std::endl;
+            QColor stippleColor = colors[max_value_pair.second];
+
+            if (false){//cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
+                num_merge++;
+                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), stippleColor);
+                d.drawX(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::red);
+            }
+            else if (false){//(cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
+                backgroundStipples.push_back({cell.centroid, point_size, stippleColor});
+                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), stippleColor);
+            }
+            else // split
+            {
+                num_split++;
+                split_cell(backgroundStipples, cell, point_size, stippleColor, false);
+                d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), stippleColor);
+                auto last = backgroundStipples.back();
+                auto secondLast = backgroundStipples[backgroundStipples.size() - 2];
+                d.drawPoints(last.pos.x() * m_size.width(), last.pos.y() * m_size.height(), Qt::green);
+                d.drawPoints(secondLast.pos.x() * m_size.width(), secondLast.pos.y() * m_size.height(), Qt::green);
+            }
+
+
+        }
+
+        if (num_split == 0 && num_merge == 0)
+            break;
+        num_split = 0;
+        num_merge = 0;
+
+        m_mlbg->paint(m_canvas, backgroundStipples, 20);
+
+        // Handle other events, allowing GUI updates
+        QCoreApplication::processEvents();
+
+    }
+
+    for (int i = 0; i < foregroundStipples.size(); i++) {
+        backgroundStipples.push_back(foregroundStipples[i]);
+    }
+
+    m_mlbg->paint(m_canvas, backgroundStipples, 20);
+
+    // Handle other events, allowing GUI updates
+    QCoreApplication::processEvents();
+
+    return foregroundStipples;
+}
+
 
 
 std::vector<Cell> MLBG::generate_voronoi_cells_color(std::vector<Stipple> points, std::vector<int> &indices, int id)
