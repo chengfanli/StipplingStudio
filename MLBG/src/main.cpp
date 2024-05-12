@@ -55,8 +55,10 @@ int main(int argc, char *argv[])
     settings.hysteresis = input.value("WLBG/hysteresis").toFloat();
     settings.hysteresis_delta = input.value("WLBG/hysteresis_delta").toFloat();
     settings.adaptive_stipple_size = input.value("WLBG/adaptive_stipple_size").toBool();
-
-
+    //Color
+    //settings.palette = input.value("COLOR/palette").toStringList();
+    settings.pre_image_path = settings.image_path;
+    settings.input_path = args[0];
 
     // Create a GUI window
     MainWindow w;

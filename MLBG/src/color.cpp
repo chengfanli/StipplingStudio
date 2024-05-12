@@ -1,32 +1,83 @@
 #include "mlbg.h"
+#include "wlbg.h"
 #include "settings.h"
 #include <iostream>
-#include <QCoreApplication>
 #include <random>
-#include <unordered_map>
-#include <chrono>
-#include <thread>
-#include "wlbg.h"
+#include <QCoreApplication>
+#include <QSettings>
 
-#include <vector>
-#include <algorithm>
+void MLBG::init_config() {
+    // std::cout<<"Select Color Palette"<<std::endl;
+    // system("cd Pylette && python run.py && cd ../");
 
-MLBG::MLBG() {
-    m_image = QImage(settings.image_path);
+    // std::cout<<"PreProcessing image"<<std::endl;
+    // system("cd unmixer && python run.py && cd ../");
+
+    QSettings input(settings.input_path, QSettings::IniFormat);
+    settings.palette = input.value("COLOR/palette").toStringList();
+
+    m_image = QImage(settings.pre_image_path);
+    std::cout << "Image path: " << settings.pre_image_path.toStdString() << std::endl;
     m_density = m_image.scaledToWidth(
                            settings.supersampling_factor * m_image.width(),
                            Qt::SmoothTransformation
                            ).convertToFormat(QImage::Format_Grayscale8);
     m_size = m_image.size();
+
+    color_size = 0;
+    for (QString &colorString : settings.palette) {
+        colorString = colorString.trimmed();
+        colors.push_back(QColor(colorString));
+        color_size++;
+    }
+
+    for(int i = 0; i < color_size; i++) {
+        QImage tmp_image = QImage(QString("./images/%1.png").arg(i));
+        m_densities.push_back(tmp_image.scaledToWidth(
+                                           settings.supersampling_factor * m_image.width(),
+                                           Qt::SmoothTransformation
+                                           ).convertToFormat(QImage::Format_Grayscale8));
+    }
+    std::vector<float> sum;
+    for(int x = 0; x < m_image.width(); x++)
+        for(int y = 0; y < m_image.height(); y++) {
+            float density_sum = 0.f;
+            for(int i = 0; i < color_size; i++) {
+                QRgb densityPixel = m_densities[i].pixel(x, y);
+                float density_i = std::max(1.0f - qGray(densityPixel) / 255.0f * qAlpha(densityPixel) / 255.0f,
+                                           std::numeric_limits<float>::epsilon());
+                density_sum += density_i;
+            }
+            sum_density_pixel[std::make_pair(x,y)] = std::clamp(density_sum, 0.0f, 1.0f);
+        }
+
+}
+std::vector<Stipple> MLBG::init_stipples_color(QColor color, int id)
+{
+    int init_num = settings.init_stipple_num;
+    float init_size = settings.init_stipple_size;
+
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<float> dis(0.01f, 0.99f);
+    std::vector<Stipple> stipples(init_num);
+    std::generate(stipples.begin(), stipples.end(), [&]() {
+        return Stipple{Eigen::Vector2f(dis(gen), dis(gen)), init_size,
+                       color, false, 0.f, id};
+    });
+
+    return stipples;
 }
 
-std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoronoi)
+std::vector<Stipple> MLBG::stippling_color(Canvas *m_canvas, MLBG *m_mlbg, bool isVoronoi)
 {
     // init
-    // paint_layers();
+    init_config();
     std::vector<std::vector<Stipple>> layers_stipples;// the vector of stipples in diff layers
-    layers_stipples.push_back(init_stipples(Qt::black, false));
-    layers_stipples.push_back(init_stipples(Qt::white, true));
+    for(int i = 0; i < color_size; i++) {
+        layers_stipples.push_back(init_stipples_color(colors[i], i));
+    }
     std::vector<std::vector<Cell>> layers_cells;//the vector of cells in diff layers
 
     //number of Layer
@@ -60,7 +111,7 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
             auto &stipples = layers_stipples[i];
             total_stipples.insert(total_stipples.end(), stipples.begin(), stipples.end());
 
-            std::vector<Cell> voronoi_cells = generate_voronoi_cells(stipples, indices_map[i], d, stipples[0].inverse);
+            std::vector<Cell> voronoi_cells = generate_voronoi_cells_color(stipples, indices_map[i], i);
             indices_map[i] = computeIdxMap(indices_map[i], stipples.size());
             layers_cells.push_back(voronoi_cells);
         }
@@ -73,6 +124,7 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
             for(int j = 0; j < layers_stipples[i].size(); j++) {
                 //within-class or cross-class
                 //change the position of stipple
+                float density_sum = layers_cells[i][j].density_sum;
                 float probability = density_sum - layers_cells[i][j].average_density;
                 //get a random number from 0 to 1
                 std::random_device rd;
@@ -90,7 +142,7 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
 
             pre_stipples_num += layers_stipples[i].size(); // this is for merge_cells[merge_indices_map[idx]].centroid;
             //as the position of stipples change, need to generate new cells, check whether split or delete based on new cells
-            std::vector<Cell> voronoi_cells = generate_voronoi_cells(layers_stipples[i], indices_map[i], d, layers_stipples[i][0].inverse);
+            std::vector<Cell> voronoi_cells = generate_voronoi_cells_color(layers_stipples[i], indices_map[i], i);
             std::vector<Stipple> stipple_pre_order = layers_stipples[i];// stipples in previous order
             layers_stipples[i].clear();
             for (unsigned long long cellId = 0; cellId < voronoi_cells.size(); cellId++)
@@ -101,25 +153,21 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
 
                 float point_size = current_stipple_size(cell);
 
-                if (cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
+                if (voronoi_cells.size() > 2 && (cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f)) {// merge
                     num_merge++;
-                    d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
-                    d.drawX(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::red);
+                    // std::cout<<"merge"<<std::endl;
                 }
                 else if (cell.total_density < calculate_upper_density_bound(point_size, hysteresis)) {// keep
                     layers_stipples[i].push_back({cell.centroid, point_size, stipple.color, stipple.inverse, stipple.average_density, i});
-                    d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
+                    // std::cout<<"keep"<<std::endl;
+
                 }
                 else // split
                 {
                     num_split++;
                     split_cell(layers_stipples[i], cell, point_size, stipple);
+                    // std::cout<<"split"<<std::endl;
 
-                    d.drawPoints(cell.centroid.x() * m_size.width(), cell.centroid.y() * m_size.height(), Qt::black);
-                    auto last = layers_stipples[i].back();
-                    auto secondLast = layers_stipples[i][layers_stipples[i].size() - 2];
-                    d.drawPoints(last.pos.x() * m_size.width(), last.pos.y() * m_size.height(), Qt::green);
-                    d.drawPoints(secondLast.pos.x() * m_size.width(), secondLast.pos.y() * m_size.height(), Qt::green);
                 }
             }
         }
@@ -154,7 +202,7 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
     return total_stipples;
 }
 
-std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg)
+std::vector<Stipple> MLBG::filling_color(std::vector<Stipple> foregroundStipples, Canvas *m_canvas, MLBG *m_mlbg)
 {
     std::cout << "================= Begin filling ==================" << std::endl;
 
@@ -170,19 +218,19 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
 
     backgroundStipples.push_back(tempStipples[0]);
 
-    QImage newImage = m_mlbg->paintBG(m_canvas, tempStipples, 0);
-    tempStipples.clear();
-    QImage newDensity = newImage.scaledToWidth(
-                                      settings.supersampling_factor * newImage.width(),
-                                      Qt::SmoothTransformation
-                                      ).convertToFormat(QImage::Format_Grayscale8);
+//    QImage newImage = m_mlbg->paintBG(m_canvas, tempStipples, 0);
+//    tempStipples.clear();
+//    QImage newDensity = newImage.scaledToWidth(
+//                                    settings.supersampling_factor * newImage.width(),
+//                                    Qt::SmoothTransformation
+//                                    ).convertToFormat(QImage::Format_Grayscale8);
 
-    QImage originImage = QImage(settings.image_path);
-    QImage originDensity = originImage.scaledToWidth(
-                           settings.supersampling_factor * originImage.width(),
-                           Qt::SmoothTransformation
-                           ).convertToFormat(QImage::Format_Grayscale8);
-//    m_inv_density =
+//    QImage originImage = QImage(settings.image_path);
+//    QImage originDensity = originImage.scaledToWidth(
+//                                          settings.supersampling_factor * originImage.width(),
+//                                          Qt::SmoothTransformation
+//                                          ).convertToFormat(QImage::Format_Grayscale8);
+//    //    m_inv_density =
 
 
 
@@ -192,7 +240,7 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
     int num_split = 0;
     int num_merge = 0;
 
-//    std::this_thread::sleep_for(std::chrono::seconds(3));
+    //    std::this_thread::sleep_for(std::chrono::seconds(3));
 
 
     for (int i = 0; i < 18; i++)
@@ -201,10 +249,16 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
         std::cout << "Iteration: " << i << std::endl;
 
         // cells
-        std::vector<Cell> voronoi_cells = generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, newDensity);
-        std::vector<Cell> cells_originImage = generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, originDensity);
+        std::vector<Cell> voronoi_cells = generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, m_density);
+//        std::vector<Cell> cells_originImage = generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, originDensity);
+        std::vector< std::vector <Cell> > cells;
+        for (int j = 0; j < m_densities.size(); j++)
+        {
+            cells.push_back(generate_voronoi_cells_withDiffBGImage(backgroundStipples, d, m_densities[j]));
+        }
+
         std::cout << "Current number of points: " << backgroundStipples.size() << std::endl;
-//        std::vector<int> merge_indices_map
+        //        std::vector<int> merge_indices_map
 
         // current hysteresis
         float hysteresis = settings.hysteresis + i * settings.hysteresis_delta;
@@ -216,12 +270,26 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
             const auto &cell = voronoi_cells[cellId];
             float point_size = 4.0f;//current_stipple_size(cell);
 
-            QColor stippleColor;
-            if (cells_originImage[cellId].average_density >= cells_originImage[cellId].average_density_inv) {
-                stippleColor = Qt::black;
-            } else {
-                stippleColor = Qt::white;
+//            QColor stippleColor;
+//            if (cells_originImage[cellId].average_density >= cells_originImage[cellId].average_density_inv) {
+//                stippleColor = Qt::black;
+//            } else {
+//                stippleColor = Qt::white;
+//            }
+            // 创建一个pair数组，存储值和原始索引
+            std::vector<std::pair<float, int>> indexed_data;
+            for (int layer = 0; layer < cells.size(); layer++) {
+                indexed_data.push_back({cells[layer][cellId].average_density, layer});
             }
+
+            // 对pair数组进行排序，基于第一个元素（实际的数据值）
+            std::sort(indexed_data.begin(), indexed_data.end());
+
+            // 排序后，最大值的pair在最后一个位置
+            auto& max_value_pair = indexed_data.back();
+//            std::cout << "最大值是: " << max_value_pair.first << std::endl;
+//                    std::cout << "最大值的原始ID (索引) 是: " << max_value_pair.second << std::endl;
+            QColor stippleColor = colors[max_value_pair.second];
 
             if (false){//cell.total_density < calculate_lower_density_bound(point_size, hysteresis) || cell.area == 0.0f) {// merge
                 num_merge++;
@@ -270,161 +338,9 @@ std::vector<Stipple> MLBG::filling(std::vector<Stipple> foregroundStipples, Canv
     return foregroundStipples;
 }
 
-std::vector<Cell> MLBG::generate_voronoi_cells_withDiffBGImage(std::vector<Stipple> points, draw &d, QImage newDensity)
-{
-    std::cout << 271 << std::endl;
-    jcv_diagram diagram;
-    auto count = points.size();
-    jcv_clipper* clipper = 0;
-    jcv_rect rect;
-
-    std::cout << 277 << std::endl;
-
-    jcv_point dimensions;
-    dimensions.x = (jcv_real)newDensity.width();
-    dimensions.y = (jcv_real)newDensity.height();
-
-    std::cout << 283 << std::endl;
-
-    d.init(dimensions.x, dimensions.y);
-
-    std::cout << 287 << std::endl;
-
-    jcv_point m;
-    m.x = 0.0;
-    m.y = 0.0;
-    rect.min = m;
-    rect.max = dimensions;
-
-    std::cout << 295 << std::endl;
-
-    memset(&diagram, 0, sizeof(jcv_diagram));
-    std::cout << 298 << std::endl;
-    jcv_point* temp = construct_jcv(points, &diagram.min, &dimensions, &dimensions);
-    std::cout << 300 << std::endl;
-    jcv_diagram_generate(count, temp, &rect, clipper, &diagram);
-    std::cout << 302 << std::endl;
-
-    std::cout << "Generating Voronoi Diagram" << std::endl;
-    const jcv_site* sites = jcv_diagram_get_sites( &diagram );
-
-    IndexMap idxMap(m_density.width(), m_density.height(), points.size());
-
-    std::cout << "Painting Voronoi Diagram" << std::endl;
-
-    for( int i = 0; i < diagram.numsites; ++i )
-    {
-        const jcv_site* site = &sites[i];
-        jcv_point s = site->p;
-
-        const jcv_graphedge* e = site->edges;
-        while( e )
-        {
-            jcv_point p0 = e->pos[0];
-            jcv_point p1 = e->pos[1];
-            d.drawEdge(p0, p1, QColor(255, 192, 203));
-
-            // Compute triangle bounding box
-            jcv_point* v0 = &s;
-            jcv_point* v1 = &p0;
-            jcv_point* v2 = &p1;
-
-            // Clip against screen bounds
-            auto minX = max2(min3((int)v0->x, (int)v1->x, (int)v2->x), 0);
-            auto minY = max2(min3((int)v0->y, (int)v1->y, (int)v2->y), 0);
-            auto maxX = min2(max3((int)v0->x, (int)v1->x, (int)v2->x), newDensity.width() - 1);
-            auto maxY = min2(max3((int)v0->y, (int)v1->y, (int)v2->y), newDensity.height() - 1);
-
-            // Rasterize
-            jcv_point p;
-            for (int y = minY; y <= maxY; y++)
-            {
-                for (int x = minX; x <= maxX; x++)
-                {
-                    //                    p = jcv_point(x, y);
-                    p.x = x;
-                    p.y = y;
-
-                    if (isInsideTriangle(p0, p1, s, p))
-                        idxMap.set(p.x, p.y, (uint32_t)i);
-                }
-            }
-            e = e->next;
-        }
-    }
-
-    jcv_diagram_free( &diagram );
-
-    std::cout << "Calculating Voronoi Cell" << std::endl;
-    auto res = accumulateCells_withDiffImage(idxMap, newDensity);
-    return res;
-}
-
-std::vector<Cell> MLBG::accumulateCells_withDiffImage(const IndexMap& map, QImage density)
-{
-    // compute voronoi cell moments
-    std::vector<Cell> cells = std::vector<Cell>(map.count());
-    std::vector<Moments> moments = std::vector<Moments>(map.count());
-
-    #pragma omp parallel for collapse(2)
-    for (int x = 0; x < map.width; ++x) {
-        for (int y = 0; y < map.height; ++y) {
-            uint32_t index = map.get(x, y);
-
-            QRgb densityPixel = density.pixel(x, y);
-            float density = std::max(1.0f - qGray(densityPixel) / 255.0f * qAlpha(densityPixel) / 255.0f,
-                                     std::numeric_limits<float>::epsilon());
-//            if(inverse) {
-//                density = 1.f - density;
-//            }
-            #pragma omp critical
-            {
-                Cell& cell = cells[index];
-                cell.area++;
-                cell.total_density += density;
-
-                Moments& m = moments[index];
-                m.moment00 += density;
-                m.moment10 += x * density;
-                m.moment01 += y * density;
-                m.moment11 += x * y * density;
-                m.moment20 += x * x * density;
-                m.moment02 += y * y * density;
-            }
-        }
-    }
-
-    // compute cell quantities
-    #pragma omp parallel for
-    for (size_t i = 0; i < cells.size(); ++i) {
-        Cell& cell = cells[i];
-        if (cell.total_density <= 0.0f) continue;
-
-        auto [m00, m10, m01, m11, m20, m02] = moments[i];
-
-        //density
-        cell.average_density = cell.total_density / cell.area;
-        std::clamp(cell.average_density, 0.f, 1.f);
-        cell.average_density_inv = 1.f - cell.average_density;
-
-        // centroid
-        cell.centroid[0] = (m10 / m00);
-        cell.centroid[1] = (m01 / m00);
-
-        // orientation
-        float x = m20 / m00 - cell.centroid.x() * cell.centroid.x();
-        float y = 2.0f * (m11 / m00 - cell.centroid.x() * cell.centroid.y());
-        float z = m02 / m00 - cell.centroid.y() * cell.centroid.y();
-        cell.orientation = std::atan2(y, x - z) / 2.0f;
-
-        cell.centroid[0] = ((cell.centroid.x() + 0.5f) / density.width());
-        cell.centroid[1] = ((cell.centroid.y() + 0.5f) / density.height());
-    }
-    return cells;
-}
 
 
-std::vector<Cell> MLBG::generate_voronoi_cells(std::vector<Stipple> points, std::vector<int> &indices, draw &d, bool inverse)
+std::vector<Cell> MLBG::generate_voronoi_cells_color(std::vector<Stipple> points, std::vector<int> &indices, int id)
 {
     jcv_diagram diagram;
     auto count = points.size();
@@ -432,10 +348,8 @@ std::vector<Cell> MLBG::generate_voronoi_cells(std::vector<Stipple> points, std:
     jcv_rect rect;
 
     jcv_point dimensions;
-    dimensions.x = (jcv_real)m_density.width();
-    dimensions.y = (jcv_real)m_density.height();
-
-    d.init(dimensions.x, dimensions.y);
+    dimensions.x = (jcv_real)m_densities[id].width();
+    dimensions.y = (jcv_real)m_densities[id].height();
 
     jcv_point m;
     m.x = 0.0;
@@ -450,7 +364,7 @@ std::vector<Cell> MLBG::generate_voronoi_cells(std::vector<Stipple> points, std:
     // std::cout << "Generating Voronoi Diagram" << std::endl;
     const jcv_site* sites = jcv_diagram_get_sites( &diagram );
 
-    IndexMap idxMap(m_density.width(), m_density.height(), points.size());
+    IndexMap idxMap(m_densities[id].width(), m_densities[id].height(), points.size());
 
     indices.clear();
     // std::cout << "Painting Voronoi Diagram" << std::endl;
@@ -466,7 +380,6 @@ std::vector<Cell> MLBG::generate_voronoi_cells(std::vector<Stipple> points, std:
         {
             jcv_point p0 = e->pos[0];
             jcv_point p1 = e->pos[1];
-            d.drawEdge(p0, p1, QColor(255, 192, 203));
 
             // Compute triangle bounding box
             jcv_point* v0 = &s;
@@ -498,48 +411,79 @@ std::vector<Cell> MLBG::generate_voronoi_cells(std::vector<Stipple> points, std:
     }
 
     jcv_diagram_free( &diagram );
-    if((int)points.size() != (int)diagram.numsites) {
-        std::cout<<"p"<<points.size()<<" "<<"num"<<diagram.numsites<<std::endl;
-    }
+    // if((int)points.size() != (int)diagram.numsites) {
+    //     std::cout<<"p"<<points.size()<<" "<<"num"<<diagram.numsites<<std::endl;
+    // }
     // assert((int)points.size() == (int)diagram.numsites);
     // std::cout << "Calculating Voronoi Cell" << std::endl;
-    auto res = accumulateCells(idxMap, inverse);
+    auto res = accumulateCells_color(idxMap, id);
     return res;
 }
 
-
-std::vector<int> MLBG::computeIdxMap(std::vector<int> indices, int size) { //switch map from "cell->stipple" to "stipple->cell"
-    std::vector<int> ret(size); // size: the size of old points. might be bigger than cells size(indices.size())
-    for(int i = 0; i < (int)indices.size(); i++) {
-        ret[indices[i]] = i;
-    }
-    return ret;
-}
-
-void MLBG::split_cell(std::vector<Stipple>& stipples, Cell cell, float point_size, Stipple stipple)
+std::vector<Cell> MLBG::accumulateCells_color(const IndexMap& map, int id)
 {
-    const float area = std::max(1.0f, cell.area);
-    const float circleRadius = std::sqrt(area / M_PI);
-    Eigen::Vector2f splitVector = Eigen::Vector2f(0.5f * circleRadius, 0.0f);
+    // compute voronoi cell moments
+    std::vector<Cell> cells = std::vector<Cell>(map.count());
+    // std::cout<<"map size"<<map.count()<<std::endl;
+    std::vector<Moments> moments = std::vector<Moments>(map.count());
 
-    const float a = cell.orientation;
-    Eigen::Vector2f splitVectorRotated = Eigen::Vector2f(
-        splitVector.x() * std::cos(a) - splitVector.y() * std::sin(a),
-        splitVector.y() * std::cos(a) + splitVector.x() * std::sin(a));
+#pragma omp parallel for collapse(2)
+    for (int x = 0; x < map.width; ++x) {
+        for (int y = 0; y < map.height; ++y) {
+            uint32_t index = map.get(x, y);
 
-    splitVectorRotated[0] = (splitVectorRotated[0] / m_density.width());
-    splitVectorRotated[1] = (splitVectorRotated[1] / m_density.height());
+            QRgb densityPixel = m_densities[id].pixel(x, y);
+            float density = std::max(1.0f - qGray(densityPixel) / 255.0f * qAlpha(densityPixel) / 255.0f,
+                                    std::numeric_limits<float>::epsilon());
 
-    Eigen::Vector2f splitSeed1 = cell.centroid - splitVectorRotated;
-    Eigen::Vector2f splitSeed2 = cell.centroid + splitVectorRotated;
 
-    // check boundaries
-    splitSeed1[0] = (std::max(0.0f, std::min(splitSeed1.x(), 1.0f)));
-    splitSeed1[1] = (std::max(0.0f, std::min(splitSeed1.y(), 1.0f)));
+#pragma omp critical
+            {
+                Cell& cell = cells[index];
+                cell.density_sum +=sum_density_pixel[std::make_pair(x,y)];
+                cell.area++;
+                cell.total_density += density;
 
-    splitSeed2[0] = (std::max(0.0f, std::min(splitSeed2.x(), 1.0f)));
-    splitSeed2[1] = (std::max(0.0f, std::min(splitSeed2.y(), 1.0f)));
+                Moments& m = moments[index];
+                m.moment00 += density;
+                m.moment10 += x * density;
+                m.moment01 += y * density;
+                m.moment11 += x * y * density;
+                m.moment20 += x * x * density;
+                m.moment02 += y * y * density;
+            }
+        }
+    }
 
-    stipples.push_back({jitter(splitSeed1), point_size, stipple.color, stipple.inverse, stipple.average_density, stipple.layerId});
-    stipples.push_back({jitter(splitSeed2), point_size, stipple.color, stipple.inverse, stipple.average_density, stipple.layerId});
+    // compute cell quantities
+#pragma omp parallel for
+    for (size_t i = 0; i < cells.size(); ++i) {
+        Cell& cell = cells[i];
+        if (cell.total_density <= 0.0f) continue;
+
+        auto [m00, m10, m01, m11, m20, m02] = moments[i];
+
+        //density
+        cell.average_density = cell.total_density / cell.area;
+        std::clamp(cell.average_density, 0.f, 1.f);
+
+        cell.density_sum = cell.density_sum / cell.area;
+        if(cell.density_sum > 1.0)
+            std::cout<<"density_sum:" << cell.density_sum<<std::endl;
+        // centroid
+        cell.centroid[0] = (m10 / m00);
+        cell.centroid[1] = (m01 / m00);
+
+        // orientation
+        float x = m20 / m00 - cell.centroid.x() * cell.centroid.x();
+        float y = 2.0f * (m11 / m00 - cell.centroid.x() * cell.centroid.y());
+        float z = m02 / m00 - cell.centroid.y() * cell.centroid.y();
+        cell.orientation = std::atan2(y, x - z) / 2.0f;
+
+        cell.centroid[0] = ((cell.centroid.x() + 0.5f) / m_density.width());
+        cell.centroid[1] = ((cell.centroid.y() + 0.5f) / m_density.height());
+    }
+    return cells;
 }
+
+

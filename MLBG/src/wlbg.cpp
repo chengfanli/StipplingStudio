@@ -102,7 +102,8 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
     QString filePath = settings.output_path; // Set your desired file path
 
     QImage image(m_size,  QImage::Format_RGBX8888);
-    image.fill(QColor(255, 192, 203)); // Fill the background with white
+    // image.fill(QColor(255, 192, 203)); // Fill the background with white
+    image.fill(QColor(255, 255, 255)); // Fill the background with white
 
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing); // Optional: for smoother edges
