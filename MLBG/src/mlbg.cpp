@@ -165,6 +165,19 @@ std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoro
         QCoreApplication::processEvents();
     }
 
+    // for (int i = 0; i < 100; i++)
+    // {
+    //     std::random_device rd;
+    //     std::mt19937 g(rd());
+    //     std::shuffle(total_stipples.begin(), total_stipples.end(), g);
+
+    //     m_mlbg->paint(m_canvas, total_stipples, 1);
+
+    //     QCoreApplication::processEvents();
+
+    //     std::this_thread::sleep_for(std::chrono::seconds(3));
+    // }
+
     return total_stipples;
 }
 

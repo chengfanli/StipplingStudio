@@ -135,7 +135,7 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
     QString filePath = settings.output_path; // Set your desired file path
 
     QImage image(m_size,  QImage::Format_RGBX8888);
-    image.fill(Qt::white); // Fill the background with white
+    image.fill(QColor("#ebeddf")); // Fill the background with white
 
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing); // Optional: for smoother edges
@@ -150,9 +150,9 @@ void WLBG::paint(Canvas *m_canvas, std::vector<Stipple> points, int iteration)
 
         // Set brush and pen for this stipple
         if (iteration == settings.max_iteration - 1)
-            painter.setBrush(QBrush(QColor(0x5b, 0xc0, 0xeb)));
+            painter.setBrush(QBrush(QColor("#333a2f")));
         else
-            painter.setBrush(QBrush(QColor(0x5b, 0xc0, 0xeb)));//stipple.color));
+            painter.setBrush(QBrush(QColor("#333a2f")));//stipple.color));
 
         // Draw the stipple
         painter.drawEllipse(center, radius, radius);
