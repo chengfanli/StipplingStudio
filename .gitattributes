@@ -1,4 +1,4 @@
 * linguist-vendored
 *.cpp linguist-vendored=false
-./Reconstruction/*.py linguist-vendored=false
+Reconstruction/*.py linguist-vendored=false
 *.ipynb linguist-vendored=false
