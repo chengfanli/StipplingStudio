@@ -48,6 +48,7 @@ struct Stipple
     bool moving;
     Eigen::Vector2f aim_pos;
     float speed;
+    float aim_size;
 };
 
 struct Cell
