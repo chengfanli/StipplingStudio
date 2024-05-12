@@ -1,4 +1,5 @@
-
+output/*
+!output/.gitkeep 
 voronoi-images/*
 !voronoi-images/.gitkeep 
 classdemo/
