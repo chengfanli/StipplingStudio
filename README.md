@@ -16,6 +16,8 @@ Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graph
 
 ## Gallery
 
+![tiger](Gallery/book.gif)
+
 ## References
 
 Deussen, Oliver, Marc Spicker, and Qian Zheng. "Weighted linde-buzo-gray stippling." *ACM Transactions on Graphics (TOG)* 36.6 (2017): 1-12.
