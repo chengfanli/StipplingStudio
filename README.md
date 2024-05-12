@@ -8,6 +8,8 @@ Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graph
 
 \[[Demo Video](https://drive.google.com/file/d/1Hk2hPs_mVhhbz9oe8zTLfxnnQoMRPXu8/view?usp=drive_link)\]
 
+## Overview
+
 ## WLGB
 
 ## MLGB
@@ -23,6 +25,8 @@ Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graph
 <img src="Gallery/s_0378.png" width="400">    <img src="Gallery/s_1547.png" width="400">
 
 <img src="Gallery/color_with_filling.jpg" width="600">
+
+ <img src="Gallery/s_0019.png" width="400"> <img src="Gallery/s_1503.png" width="400">
 
 ## References
 
