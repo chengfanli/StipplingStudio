@@ -2,9 +2,11 @@
 
 # Stippling
 
-CSCI 2240 Final Project for the Spring 2024 by Stippling Studio (Chengfan Li, Wendi Liao and Yixuan Liu)
+CSCI 2240 Final Project for the Spring 2024 by Stippling Studio ([Chengfan Li](https://github.com/lllllcf), [Wendi Liao](https://github.com/wendi-liao) and [Yixuan Liu](https://github.com/Ahhhh2016))
 
-Special thanks to the papers "Weighted Linde-Buzo-Gray Stippling" and "Multi-class Inverted Stippling" that inspired this project.
+Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graphics.uni-konstanz.de/publikationen/Deussen2017LindeBuzoGray/index.html)" and "[Multi-class Inverted Stippling](https://kops.uni-konstanz.de/bitstreams/21672707-75c4-410b-a4ff-87b21c2ed630/download)" that inspired this project.
+
+\[[Demo Video](https://drive.google.com/file/d/1Hk2hPs_mVhhbz9oe8zTLfxnnQoMRPXu8/view?usp=drive_link)\]
 
 ## WLGB
 
