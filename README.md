@@ -16,13 +16,13 @@ Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graph
 
 ## Gallery
 
-<img src="Gallery/book.gif" alt="tiger" style="zoom:50%;" />
+<img src="Gallery/book.gif" width="800">
 
-<img src="Gallery/monroe_with_ordering.png" alt="monroe_with_ordering" style="zoom:50%;" /> <img src="Gallery/filling.jpg" alt="filling" style="zoom:30%;" />
+<img src="Gallery/monroe_with_ordering.png" width="300">    <img src="Gallery/filling.jpg" width="500">
 
-<img src="Gallery/s_0378.png" alt="s_0378" style="zoom:25%;" /> <img src="Gallery/s_1547.png" alt="s_1547" style="zoom:25%;" />
+<img src="Gallery/s_0378.png" width="400">    <img src="Gallery/s_1547.png" width="400">
 
-<img src="Gallery/color_with_filling.jpg" alt="color_with_filling" style="zoom:40%;" />
+<img src="Gallery/color_with_filling.jpg" width="600">
 
 ## References
 
