@@ -21,19 +21,19 @@ Based on the research and exploration of stippling, we have implemented the foll
 
 ## WLBG
 
-For more information, please read the README for WLBG.
+For more information, please read the [README](./WLBG/README.md) for WLBG.
 
 
 
 ## MLBG
 
-For more information, please read the README for MLBG.
+For more information, please read the [README](./MLBG/README.md) for MLBG.
 
 
 
 ## Reconstruction
 
-For more information, please read the README for Reconstruction.
+For more information, please read the [README](./Reconstruction/README.md) for Reconstruction.
 
 
 
