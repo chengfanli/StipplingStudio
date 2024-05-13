@@ -21,7 +21,7 @@ Based on the research and exploration of stippling, we have implemented the foll
 
 ## WLBG
 
-For more information, please read the [README](./WLBG/README.md) for WLBG.
+For more information, please read the [README](./WLGB/README.md) for WLBG.
 
 
 
