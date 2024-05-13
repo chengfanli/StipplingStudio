@@ -10,11 +10,32 @@ Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graph
 
 ## Overview
 
-## WLGB
+Based on the research and exploration of stippling, we have implemented the following features.
 
-## MLGB
++ Weighted LBG algorithm based stippling that can convert grayscale image to stippling.
++ Visualization of Voronoi diagrams, as well as splitting and merging of points.
++ Video stippling with low noise and minimal flickering using WLGB.
++ Multi-class Inverted Stippling for grayscale image.
++ Color Stippling with palette extraction.
++ UNet-based reconstruction model to restore stippling to grayscale images.
+
+## WLBG
+
+For more information, please read the README for WLBG.
+
+
+
+## MLBG
+
+For more information, please read the README for MLBG.
+
+
 
 ## Reconstruction
+
+For more information, please read the README for Reconstruction.
+
+
 
 ## Gallery
 
