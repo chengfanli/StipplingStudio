@@ -32,7 +32,7 @@ Based on the research and exploration of stippling, we have implemented the foll
 
 ### Voronoi Diagram
 
-<img src="./Gallery/voronoi2.png" width="500">
+<img src="./Gallery/voronoi2.png" width="400">
 
 Voronoi diagrams can be used to create a variety of amazing visual effects including stippling. In this project, we use [jc_voronoi](https://github.com/JCash/voronoi) to calculate voronoi diagram efficiently and assign pixels to voronoi cell based on edges and site position.
 
@@ -40,7 +40,7 @@ Voronoi diagrams can be used to create a variety of amazing visual effects inclu
 
 ### Video Stippling
 
-<img src="Gallery/tiger.gif" width="500">
+<img src="Gallery/tiger.gif" width="400">
 We haven't integrated video stippling on the master branch yet, but there are some helpful python scripts included in the [VideoStippling](./VideoStippling) folder.
 
 + `toframe.py` convert video to frames based on the fps of the original video.
@@ -60,15 +60,15 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 ## Gallery
 
-<img src="Gallery/book.gif" width="800">
+<img src="Gallery/book.gif" width="500">
 
-<img src="Gallery/monroe_with_ordering.png" width="300">    <img src="Gallery/filling.jpg" width="500">
+<img src="Gallery/monroe_with_ordering.png" width="200">    <img src="Gallery/filling.jpg" width="400">
 
-<img src="Gallery/s_0378.png" width="400">    <img src="Gallery/s_1547.png" width="400">
+<img src="Gallery/s_0378.png" width="300">    <img src="Gallery/s_1547.png" width="300">
 
-<img src="Gallery/color_with_filling.jpg" width="600">
+<img src="Gallery/color_with_filling.jpg" width="500">
 
- <img src="Gallery/s_0019.png" width="400"> <img src="Gallery/s_1503.png" width="400">
+ <img src="Gallery/s_0019.png" width="300"> <img src="Gallery/s_1503.png" width="300">
 
 ## References
 
