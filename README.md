@@ -8,32 +8,53 @@ Special thanks to the papers "[Weighted Linde-Buzo-Gray Stippling](https://graph
 
 \[[Demo Video](https://drive.google.com/file/d/1Hk2hPs_mVhhbz9oe8zTLfxnnQoMRPXu8/view?usp=drive_link)\]
 
+
+
 ## Overview
 
 Based on the research and exploration of stippling, we have implemented the following features.
 
 + Weighted LBG algorithm based stippling that can convert grayscale image to stippling.
+
 + Visualization of Voronoi diagrams, as well as splitting and merging of points.
+
 + Video stippling with low noise and minimal flickering using WLGB.
+
 + Multi-class Inverted Stippling for grayscale image.
+
 + Color Stippling with palette extraction.
+
 + UNet-based reconstruction model to restore stippling to grayscale images.
+
+  
 
 ## WLBG
 
-For more information, please read the [README](./WLGB/README.md) for WLBG.
+### Voronoi Diagram
+
+<img src="./Gallery/voronoi2.png" width="500">
+
+Voronoi diagrams can be used to create a variety of amazing visual effects including stippling. In this project, we use [jc_voronoi](https://github.com/JCash/voronoi) to calculate voronoi diagram efficiently and assign pixels to voronoi cell based on edges and site position.
+
+### Usage
+
+### Video Stippling
+
+<img src="Gallery/tiger.gif" width="500">
+We haven't integrated video stippling on the master branch yet, but there are some helpful python scripts included in the [VideoStippling](./VideoStippling) folder.
+
++ `toframe.py` convert video to frames based on the fps of the original video.
++ `tovideo.py` convert frames from `out_frame` folder to video.
+
+So in order to turn the video into stippling, `toframe.py` should be first to used to turn the video into frames, then perform stippling frame by frame, and finally convert processed frames into a video again using `tovideo.py`.
 
 
 
 ## MLBG
 
-For more information, please read the [README](./MLBG/README.md) for MLBG.
-
 
 
 ## Reconstruction
-
-For more information, please read the [README](./Reconstruction/README.md) for Reconstruction.
 
 
 
