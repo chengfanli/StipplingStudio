@@ -10,8 +10,8 @@ void MLBG::init_config() {
     // std::cout<<"Select Color Palette"<<std::endl;
     // system("cd Pylette && python run.py && cd ../");
 
-    // std::cout<<"PreProcessing image"<<std::endl;
-    // system("cd unmixer && python run.py && cd ../");
+     std::cout<<"PreProcessing image"<<std::endl;
+     system("cd unmixer && python run.py && cd ../");
 
     QSettings input(settings.input_path, QSettings::IniFormat);
     settings.palette = input.value("COLOR/palette").toStringList();
