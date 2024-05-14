@@ -52,7 +52,7 @@ Once the application is running, you will see a GUI that allows you to interact 
 + Draw Voronoi Diagram: Generates and displays a Voronoi diagram based on the stippled points.
 
 #### Exiting the Application
-To exit the application, you can simply close the application window or use the exit option within the application menu, if available.
+To exit the application, you can simply close the application window. The result will be in the output directory.
 
 
 
@@ -69,6 +69,24 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 
 ## MLBG
+
+### Running the Application
+#### Prerequisites
+Before running the application, ensure that changing the working directory to the MLBG directory, and put `./inis/test.ini` in the command line arguments.
+
+#### Starting the Application
+Ensure you are at the MLBG project, either Release mode or Debug mode. Click the run button on Qt.
+
+#### Using the Application
+The GUI is similar to WLBG's, only with a few more features:
+
++ Multiple Stippling: Convert the loaded image into a stippled art form using Multi-class Inverted Stippling technique.
++ Fill Background: After showing the animation of Multi-class Inverted Stippling, another LBG stippling process will be shown to fill the background.
++ Color Stippling: Without click the load image button, if you click this button, the color stippling process will automatically be run using the images in the MLBG/images directory.
+#### Exiting the Application
+To exit the application, you can simply close the application window. The result will be in the output directory.
+
+
 
 ## Color Stippling
 
