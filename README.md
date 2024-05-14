@@ -82,7 +82,6 @@ The GUI is similar to WLBG's, only with a few more features:
 
 + Multiple Stippling: Convert the loaded image into a stippled art form using Multi-class Inverted Stippling technique.
 + Fill Background: After showing the animation of Multi-class Inverted Stippling, another LBG stippling process will be shown to fill the background.
-+ Color Stippling: Without click the load image button, if you click this button, the color stippling process will automatically be run using the images in the MLBG/images directory.
 #### Exiting the Application
 To exit the application, you can simply close the application window. The result will be in the output directory.
 
@@ -90,7 +89,28 @@ To exit the application, you can simply close the application window. The result
 
 ## Color Stippling
 
+### Running the Application
 
+#### Prerequisites
+
+Before running the application, ensure that changing the working directory to the MLBG directory, and put `./inis/test.ini` in the command line arguments.
+
+#### Starting the Application
+
+Ensure you are at the MLBG project, either Release mode or Debug mode. Click the run button on Qt.
+
+#### Using the Application
+
+The GUI is similar to WLBG's, only with a few more features:
+
++ Palette Selection:   This is done by the Python program Pylette. It will generate the selected palette from  'image_path' in `./inis/test.ini` and write the result into 'palette' in `./inis/test.ini`. The `image_path` should be an absolute path. When running it, simply use `python run.py` in the Pylette folder.
++ Layer Image Generation: This is done by the Python program Unmixer. It will generate layer images based on the image from 'image_path' in `./inis/test.ini` and the color selection from 'palette' in `./inis/test.ini`. The `image_path` should be an absolute path. When running it, simply use `python run.py` in the Unmixer folder.
++ Color Stippling: Click the 'Load Image' button to load the target image. Then, click the 'Color Stippling' button to generate the color stippling version of the loaded image. This process will automatically invoke Palette Selection and Layer Image Generation first. It may cause the application to become unresponsive. Users should wait patiently; the status can be viewed on the output page of Qt Creator. The final image can be viewed in the window.
++ Fill Color: Click the "Load Image" button to load the target image. Then, click the "Fill Color" button to generate the color stippling version of the loaded image with the filling effect. The process before filling is similar to "Color Stippling."
+
+#### Exiting the Application
+
+To exit the application, you can simply close the application window. The result will be in the output directory.
 
 ## Reconstruction
 
@@ -121,7 +141,6 @@ Deussen, Oliver, Marc Spicker, and Qian Zheng. "Weighted linde-buzo-gray stippli
 Christoph Schulz, Kin Chung Kwan, Michael Becher, Daniel Baumgartner, Guido Reina, Oliver Deussen, and Daniel Weiskopf. 2021. Multi-Class Inverted Stippling. *ACM Trans*. Graph. 40, 6 (2021)
 
 Tan, J., Echevarria, J. and Gingold, Y., 2018. Efficient palette-based decomposition and recoloring of images via RGBXY-space geometry. ACM Transactions on Graphics (TOG), 37(6), pp.1-10.
-
 
 
 
