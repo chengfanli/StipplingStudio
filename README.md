@@ -56,6 +56,12 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 ## Reconstruction
 
+### Usage
+
+### Results
+
+### Data
+
 
 
 ## Gallery
