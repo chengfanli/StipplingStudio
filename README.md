@@ -32,15 +32,33 @@ Based on the research and exploration of stippling, we have implemented the foll
 
 ### Voronoi Diagram
 
-<img src="./Gallery/voronoi2.png" width="500">
+<img src="./Gallery/voronoi2.png" width="400">
 
 Voronoi diagrams can be used to create a variety of amazing visual effects including stippling. In this project, we use [jc_voronoi](https://github.com/JCash/voronoi) to calculate voronoi diagram efficiently and assign pixels to voronoi cell based on edges and site position.
 
-### Usage
+### Running the Application
+#### Prerequisites
+Before running the application, ensure that changing the working directory to the WLBG directory, and put `./inis/test.ini` in the command line arguments.
+
+#### Starting the Application
+Ensure you are at the WLBG project, either Release mode or Debug mode. Click the run button on Qt.
+
+#### Using the Application
+Once the application is running, you will see a GUI that allows you to interact with the application's features:
+
++ Clear Canvas: Clears all current drawings or data on the canvas.
++ Load Image: Allows you to load an image from your computer to the application for processing.
++ Stippling: Convert the loaded image into a stippled art form using Voronoi diagrams.
++ Draw Voronoi Diagram: Generates and displays a Voronoi diagram based on the stippled points.
+
+#### Exiting the Application
+To exit the application, you can simply close the application window. The result will be in the output directory.
+
+
 
 ### Video Stippling
 
-<img src="Gallery/tiger.gif" width="500">
+<img src="Gallery/tiger.gif" width="400">
 We haven't integrated video stippling on the master branch yet, but there are some helpful python scripts included in the [VideoStippling](./VideoStippling) folder.
 
 + `toframe.py` convert video to frames based on the fps of the original video.
@@ -51,6 +69,26 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 
 ## MLBG
+
+### Running the Application
+#### Prerequisites
+Before running the application, ensure that changing the working directory to the MLBG directory, and put `./inis/test.ini` in the command line arguments.
+
+#### Starting the Application
+Ensure you are at the MLBG project, either Release mode or Debug mode. Click the run button on Qt.
+
+#### Using the Application
+The GUI is similar to WLBG's, only with a few more features:
+
++ Multiple Stippling: Convert the loaded image into a stippled art form using Multi-class Inverted Stippling technique.
++ Fill Background: After showing the animation of Multi-class Inverted Stippling, another LBG stippling process will be shown to fill the background.
++ Color Stippling: Without click the load image button, if you click this button, the color stippling process will automatically be run using the images in the MLBG/images directory.
+#### Exiting the Application
+To exit the application, you can simply close the application window. The result will be in the output directory.
+
+
+
+## Color Stippling
 
 
 
@@ -66,21 +104,24 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 ## Gallery
 
-<img src="Gallery/book.gif" width="800">
+<img src="Gallery/book.gif" width="500">
 
-<img src="Gallery/monroe_with_ordering.png" width="300">    <img src="Gallery/filling.jpg" width="500">
+<img src="Gallery/monroe_with_ordering.png" width="200">    <img src="Gallery/filling.jpg" width="400">
 
-<img src="Gallery/s_0378.png" width="400">    <img src="Gallery/s_1547.png" width="400">
+<img src="Gallery/s_0378.png" width="300">    <img src="Gallery/s_1547.png" width="300">
 
-<img src="Gallery/color_with_filling.jpg" width="600">
+<img src="Gallery/color_with_filling.jpg" width="500">
 
- <img src="Gallery/s_0019.png" width="400"> <img src="Gallery/s_1503.png" width="400">
+ <img src="Gallery/s_0019.png" width="300"> <img src="Gallery/s_1503.png" width="300">
 
 ## References
 
 Deussen, Oliver, Marc Spicker, and Qian Zheng. "Weighted linde-buzo-gray stippling." *ACM Transactions on Graphics (TOG)* 36.6 (2017): 1-12.
 
 Christoph Schulz, Kin Chung Kwan, Michael Becher, Daniel Baumgartner, Guido Reina, Oliver Deussen, and Daniel Weiskopf. 2021. Multi-Class Inverted Stippling. *ACM Trans*. Graph. 40, 6 (2021)
+
+Tan, J., Echevarria, J. and Gingold, Y., 2018. Efficient palette-based decomposition and recoloring of images via RGBXY-space geometry. ACM Transactions on Graphics (TOG), 37(6), pp.1-10.
+
 
 
 
