@@ -36,7 +36,25 @@ Based on the research and exploration of stippling, we have implemented the foll
 
 Voronoi diagrams can be used to create a variety of amazing visual effects including stippling. In this project, we use [jc_voronoi](https://github.com/JCash/voronoi) to calculate voronoi diagram efficiently and assign pixels to voronoi cell based on edges and site position.
 
-### Usage
+### Running the Application
+#### Prerequisites
+Before running the application, ensure that changing the working directory to the WLBG directory, and put `./inis/test.ini` in the command line arguments.
+
+#### Starting the Application
+Ensure you are at the WLBG project, either Release mode or Debug mode. Click the run button on Qt.
+
+#### Using the Application
+Once the application is running, you will see a GUI that allows you to interact with the application's features:
+
++ Clear Canvas: Clears all current drawings or data on the canvas.
++ Load Image: Allows you to load an image from your computer to the application for processing.
++ Stippling: Convert the loaded image into a stippled art form using Voronoi diagrams.
++ Draw Voronoi Diagram: Generates and displays a Voronoi diagram based on the stippled points.
+
+#### Exiting the Application
+To exit the application, you can simply close the application window or use the exit option within the application menu, if available.
+
+
 
 ### Video Stippling
 
@@ -51,6 +69,8 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 
 ## MLBG
+
+## Color Stippling
 
 
 
@@ -75,6 +95,9 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 Deussen, Oliver, Marc Spicker, and Qian Zheng. "Weighted linde-buzo-gray stippling." *ACM Transactions on Graphics (TOG)* 36.6 (2017): 1-12.
 
 Christoph Schulz, Kin Chung Kwan, Michael Becher, Daniel Baumgartner, Guido Reina, Oliver Deussen, and Daniel Weiskopf. 2021. Multi-Class Inverted Stippling. *ACM Trans*. Graph. 40, 6 (2021)
+
+Tan, J., Echevarria, J. and Gingold, Y., 2018. Efficient palette-based decomposition and recoloring of images via RGBXY-space geometry. ACM Transactions on Graphics (TOG), 37(6), pp.1-10.
+
 
 
 
