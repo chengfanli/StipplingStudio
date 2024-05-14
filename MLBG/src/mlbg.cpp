@@ -23,6 +23,7 @@ MLBG::MLBG() {
 std::vector<Stipple> MLBG::stippling(Canvas *m_canvas, MLBG *m_mlbg, bool isVoronoi)
 {
     // init
+    // paint_layers();
     std::vector<std::vector<Stipple>> layers_stipples;// the vector of stipples in diff layers
     layers_stipples.push_back(init_stipples(Qt::black, false));
     layers_stipples.push_back(init_stipples(Qt::white, true));

@@ -57,6 +57,10 @@ struct Cell
     float total_density;
     float average_density;
     float average_density_inv;
+
+    //
+    float density_sum;
+
 };
 
 class IndexMap;

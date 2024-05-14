@@ -66,6 +66,8 @@ MainWindow::MainWindow()
     addPushButton(layout, "Multiple Stippling", &MainWindow::onMLBGButtonClick);
 //    addPushButton(layout, "Save Image", &MainWindow::onSaveButtonClick);
     addPushButton(layout, "Fill Background", &MainWindow::onFillButtonClick);
+    addPushButton(layout, "Color Stippling", &MainWindow::onColorButtonClick);
+    addPushButton(layout, "Fill Color", &MainWindow::onFillColorButtonClick);
 }
 
 
@@ -180,6 +182,18 @@ void MainWindow::onFillButtonClick() {
     MLBG m_mlbg = MLBG();
     std::vector<Stipple> stipples = m_mlbg.stippling(m_canvas, &m_mlbg, false);
     std::vector<Stipple> newstipples = m_mlbg.filling(stipples, m_canvas, &m_mlbg);
+    m_mlbg = MLBG();
+}
+
+void MainWindow::onColorButtonClick() {
+    MLBG m_mlbg = MLBG();
+    std::vector<Stipple> stipples = m_mlbg.stippling_color(m_canvas, &m_mlbg, false);
+}
+
+void MainWindow::onFillColorButtonClick() {
+    MLBG m_mlbg = MLBG();
+    std::vector<Stipple> stipples = m_mlbg.stippling_color(m_canvas, &m_mlbg, false);
+    std::vector<Stipple> newstipples = m_mlbg.filling_color(stipples, m_canvas, &m_mlbg);
     m_mlbg = MLBG();
 }
 

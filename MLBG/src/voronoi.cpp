@@ -56,8 +56,6 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
     dimensions.x = (jcv_real)m_density.width();
     dimensions.y = (jcv_real)m_density.height();
 
-    d.init(dimensions.x, dimensions.y);
-
     jcv_point m;
     m.x = 0.0;
     m.y = 0.0;
@@ -85,7 +83,6 @@ std::vector<Cell> WLBG::generate_voronoi_cells(std::vector<Stipple> points, draw
         {
             jcv_point p0 = e->pos[0];
             jcv_point p1 = e->pos[1];
-            d.drawEdge(p0, p1, QColor(255, 192, 203));
 
             // Compute triangle bounding box
             jcv_point* v0 = &s;
@@ -211,3 +208,5 @@ std::vector<Cell> WLBG::accumulateCells(const IndexMap& map, bool inverse)
     }
     return cells;
 }
+
+
