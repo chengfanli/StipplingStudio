@@ -68,6 +68,8 @@ So in order to turn the video into stippling, `toframe.py` should be first to us
 
 ## MLBG
 
+<img src="./Gallery/monroe_with_ordering.png" width="400">
+
 ### Running the Application
 #### Prerequisites
 Before running the application, ensure that changing the working directory to the MLBG directory, and put `./inis/test.ini` in the command line arguments.
@@ -86,6 +88,8 @@ To exit the application, you can simply close the application window. The result
 
 
 ## Color Stippling
+
+<img src="./Gallery/color_with_filling.jpg" width="400">
 
 ### Running the Application
 
