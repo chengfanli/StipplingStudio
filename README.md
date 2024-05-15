@@ -26,7 +26,7 @@ Based on the research and exploration of stippling, we have implemented the foll
 
 + UNet-based reconstruction model to restore stippling to grayscale images.
 
-  
+
 
 ## WLBG
 
@@ -53,8 +53,6 @@ Once the application is running, you will see a GUI that allows you to interact 
 
 #### Exiting the Application
 To exit the application, you can simply close the application window. The result will be in the output directory.
-
-
 
 ### Video Stippling
 
@@ -112,13 +110,38 @@ The GUI is similar to WLBG's, only with a few more features:
 
 To exit the application, you can simply close the application window. The result will be in the output directory.
 
+
+
 ## Reconstruction
+
+<img src="Gallery/model.png" width="500">
 
 ### Usage
 
-### Results
++ Follow the instruction in the **Data** section to download the pre-trained model and training data.
+
++ `reconstruction_all.ipynb` contains all training code for the model.
++ You can evaluate the model on your own stippling images using `evaluate.py`.
 
 ### Data
+
+[Pre-trained model](https://drive.google.com/file/d/1wNgoFfu8BveQth--_sxytfBQHz6F83pZ/view?usp=drive_link): download from gdrive and put into [checkpoints](./Reconstruction/checkpoints) folder.
+
+[Processed data for training](https://drive.google.com/drive/folders/1WmYop4yAKnwpcS6ffFvmi2NawybhoEtK?usp=drive_link): download from gdrive and put into [data](./Reconstruction/data) folder.
+
+[Raw data](https://drive.google.com/file/d/1ddujNdD7BLoh5h58VGwizlL-kDieatXy/view?usp=drive_link): contains all color images and grayscale images without preprocessing.
+
+### Results
+
+<img src="Gallery/77_stippling.png" width="300"> <img src="Gallery/77_reconstruction.png" width="300">
+
+Use [this link](https://drive.google.com/file/d/1rNqYqDoWK2uVU3JlxZ1rmFFiMoJb_Uys/view?usp=drive_link) to download the results of all images in the test set.
+
+### Stippling-Reconstruction Iterations
+
+<img src="Gallery/S-L.png" width="500">
+
+Here is the result obtained after using our model to continuously perform the Stippling-Reconstruction cycle on the grayscale image. Detailed results can be found [here](./Reconstruction/repeat_test/data).
 
 
 
@@ -133,6 +156,8 @@ To exit the application, you can simply close the application window. The result
 <img src="Gallery/color_with_filling.jpg" width="500">
 
  <img src="Gallery/s_0019.png" width="300"> <img src="Gallery/s_1503.png" width="300">
+
+
 
 ## References
 
